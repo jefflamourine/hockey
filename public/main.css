@@ -1,0 +1,97 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+}
+
+#button-container {
+	display: table;
+	border-spacing: 1em;
+	line-height: 3em;
+	margin: auto;
+	position: relative;
+	top: 45%;
+	transform: translateY(-50%);
+}
+
+.button {
+	display: table-cell;
+	width: 7em;
+	background-color: #949;
+	color: #FFF;
+	border: 0;
+	margin-left:1em;
+	margin-right:1em;
+}
+
+#logincontainer {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 300px;
+	height: 300px;
+	margin: auto;
+}
+
+#loginform {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	text-align: center;
+}
+
+.loginField {
+	display: block;
+	width: 50%;
+	height: 40px;
+	margin: auto;
+	margin-bottom: 20px;
+	border: 1px solid #949;
+}
+
+.loginField:focus {
+	border: 2px solid #949;
+	outline: 0;
+}
+
+.submit {
+	display: inline-block;
+	height: 40px;
+	color: #ffffff;
+	background: #994499;
+	padding: 10px 20px 10px 20px;
+	text-decoration: none;
+	position: relative;
+	top: 45%;
+	border: 0;
+}
+
+.submit:hover, .button:hover {
+	background: #A5A;
+}
+
+input {
+	text-align: center;
+}
+
+/* Form placeholder colors */
+
+::-webkit-input-placeholder { /* WebKit browsers */
+	color:	#949;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	 color:	#949;
+	 opacity:	1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+	 color:	#949;
+	 opacity:	1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+	 color:	#949;
+}
+

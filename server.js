@@ -1,159 +1,154 @@
 #!/bin/env node
-//  OpenShift sample Node application
+
 var express = require('express');
-var fs      = require('fs');
+var mongodb = require('mongodb');
+var pwhash = require('password-hash');
+var Q = require('q');
 
+var App = function(){
 
-/**
- *  Define the sample application.
- */
-var SampleApp = function() {
+	// Scope
+	var self = this;
 
-    //  Scope.
-    var self = this;
+	// Set up constants
+	self.ipaddr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+	self.port	= parseInt(process.env.OPENSHIFT_NODEJS_PORT) || 8080;
+	self.mongoHost = process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1';
+	self.mongoPort = parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT) || 27017;
+	self.mongoDbName = process.env.OPENSHIFT_APP_NAME || 'hockey'
+	self.dbUser = process.env.OPENSHIFT_MONGODB_DB_USERNAME || 'user';
+	self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD || 'pass'
 
+	// Mongo intialization
+	self.dbServer = new mongodb.Server(self.mongoHost, self.mongoPort);
+	self.db = new mongodb.Db(self.mongoDbName, self.dbServer, {auto_reconnect: true});
+	self.accountCollection = self.db.collection('account');
 
-    /*  ================================================================  */
-    /*  Helper functions.                                                 */
-    /*  ================================================================  */
+	// Routes
+	self.routes = {};
+	self.routes['health'] = function(req, res){ res.send('1'); };
+	self.routes['root'] = function(req, res) { res.render('index.html'); };
 
-    /**
-     *  Set up server IP address and port # using env variables/defaults.
-     */
-    self.setupVariables = function() {
-        //  Set the environment variables we need.
-        self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+	// Registration form & form post
+	self.routes['register'] = function(req, res) { res.render('register.html'); };
+	self.routes['try-register'] = function(req, res) {
+		var name = req.body.data.name;
+		var password = req.body.data.password;
 
-        if (typeof self.ipaddress === "undefined") {
-            //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
-            //  allows us to run/test the app locally.
-            console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
-            self.ipaddress = "127.0.0.1";
-        };
-    };
+		self.registerAccount(name, password).then(self.sendRegisterResult(req, res));
+	};
 
+	// Login form & form post
+	self.routes['login'] = function(req, res) { res.render('login.html'); };
+	self.routes['try-login'] = function(req, res) {
+		var name = req.body.data.name;
+		var password = req.body.data.password;
 
-    /**
-     *  Populate the cache.
-     */
-    self.populateCache = function() {
-        if (typeof self.zcache === "undefined") {
-            self.zcache = { 'index.html': '' };
-        }
+		self.accountCollection.findOne( {"username": name}, function(err, account) {
+			if (account) {
+				res.send( {"User": account, "Password": password, "Verify": pwhash.verify(password, account.password)} );				
+			} else {
+				res.redirect('/');
+			}
+		});
+	};
 
-        //  Local cache for static content.
-        self.zcache['index.html'] = fs.readFileSync('./index.html');
-    };
+	// Create app
+	self.app = express();
 
+	// Serve static html from /public
+	self.app.use(express.static(__dirname + '/public'));
 
-    /**
-     *  Retrieve entry (content) from cache.
-     *  @param {string} key  Key identifying content to retrieve from cache.
-     */
-    self.cache_get = function(key) { return self.zcache[key]; };
+	var bodyParser = require('body-parser');
 
+	self.app.use( bodyParser.json() );		// to support JSON-encoded bodies
+	self.app.use(bodyParser.urlencoded({	// to support URL-encoded bodies
+		extended: true
+	})); 
 
-    /**
-     *  terminator === the termination handler
-     *  Terminate server on receipt of the specified signal.
-     *  @param {string} sig  Signal to terminate on.
-     */
-    self.terminator = function(sig){
-        if (typeof sig === "string") {
-           console.log('%s: Received %s - terminating sample app ...',
-                       Date(Date.now()), sig);
-           process.exit(1);
-        }
-        console.log('%s: Node server stopped.', Date(Date.now()) );
-    };
+	// URL Mappings
+	self.app.get ('/health', 		self.routes['health']);
+	self.app.get ('/', 				self.routes['root']);
+	self.app.get ('/register', 		self.routes['register']);
+	self.app.post('/try-register', 	self.routes['try-register']);
+	self.app.get ('/login', 		self.routes['login']);
+	self.app.post('/try-login', 	self.routes['try-login']);
 
+	// Logic to open a database connection.
+	self.connectDb = function(callback){
+		self.db.open(function(err, db){
+			if(err){ throw err };
+			self.db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
+			if(err){ throw err };
+			callback();
+			});
+		});
+	};
+	
+	// Starting the Node JS server with Express
+	self.startServer = function(){
+		self.app.listen(self.port, self.ipaddr, function(){
+			console.log('%s: Node server started on %s:%d ...', Date(Date.now()), self.ipaddr, self.port);
+		});
+	}
 
-    /**
-     *  Setup termination handlers (for exit and a list of signals).
-     */
-    self.setupTerminationHandlers = function(){
-        //  Process on exit and signals.
-        process.on('exit', function() { self.terminator(); });
+	// Destructors
+	self.terminator = function(sig) {
+		if (typeof sig === "string") {
+			console.log('%s: Received %s - terminating Node server ...', Date(Date.now()), sig);
+			process.exit(1);
+		};
+		console.log('%s: Node server stopped.', Date(Date.now()) );
+	};
 
-        // Removed 'SIGPIPE' from the list - bugz 852598.
-        ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
-         'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
-        ].forEach(function(element, index, array) {
-            process.on(element, function() { self.terminator(element); });
-        });
-    };
+	process.on('exit', function() { self.terminator(); });
 
+	self.terminatorSetup = function(element, index, array) {
+		process.on(element, function() { self.terminator(element); });
+	};
 
-    /*  ================================================================  */
-    /*  App server functions (main app logic here).                       */
-    /*  ================================================================  */
+	['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGPIPE', 'SIGTERM'].forEach(self.terminatorSetup);
 
-    /**
-     *  Create the routing table entries + handlers for the application.
-     */
-    self.createRoutes = function() {
-        self.routes = { };
+	// Check if name exists, if it doesn't, insert new account
+	// Since the Node MongoDB driver is async, use Q.defer() and return promise
+	self.registerAccount = function(name, password) {
+		var deferred = Q.defer();
 
-        self.routes['/asciimo'] = function(req, res) {
-            var link = "http://i.imgur.com/kmbjB.png";
-            res.send("<html><body><img src='" + link + "'></body></html>");
-        };
+		self.accountCollection.findOne( {"username": name}, function(err, account) {
+			if (account) {
+				deferred.resolve(false);
+			} else {
+				self.insertAccount(name, password);
+				deferred.resolve(true);
+			}
+		});
 
-        self.routes['/'] = function(req, res) {
-            res.setHeader('Content-Type', 'text/html');
-            res.send(self.cache_get('index.html') );
-        };
-    };
+		return deferred.promise;
+	}
 
+	// Insert account with given details and no permissions
+	self.insertAccount = function(name, password) {
+		var hashedPassword = pwhash.generate(password);
+		var account = {"username": name, "password": hashedPassword, "permissions": [] };
 
-    /**
-     *  Initialize the server (express) and create the routes and register
-     *  the handlers.
-     */
-    self.initializeServer = function() {
-        self.createRoutes();
-        self.app = express.createServer();
+		self.accountCollection.insert(account);
+	}
 
-        //  Add handlers for the app (from the routes).
-        for (var r in self.routes) {
-            self.app.get(r, self.routes[r]);
-        }
-    };
+	// Curry send register result to use given req/res pair and take a success boolean
+	self.sendRegisterResult = function(req, res) {
+		return function(successful) {
+			if (successful) {
+				res.send("Successful");
+			} else {
+				res.send("Unsuccessful");
+			}
+		}
+	}
+};
 
+// Make a new express app
+var app = new App();
 
-    /**
-     *  Initializes the sample application.
-     */
-    self.initialize = function() {
-        self.setupVariables();
-        self.populateCache();
-        self.setupTerminationHandlers();
-
-        // Create the express server and routes.
-        self.initializeServer();
-    };
-
-
-    /**
-     *  Start the server (starts up the sample application).
-     */
-    self.start = function() {
-        //  Start the app on the specific interface (and port).
-        self.app.listen(self.port, self.ipaddress, function() {
-            console.log('%s: Node server started on %s:%d ...',
-                        Date(Date.now() ), self.ipaddress, self.port);
-        });
-    };
-
-};   /*  Sample Application.  */
-
-
-
-/**
- *  main():  Main code.
- */
-var zapp = new SampleApp();
-zapp.initialize();
-zapp.start();
+// Connect to Mongo DB with start server callback
+app.connectDb(app.startServer);
 
