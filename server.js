@@ -95,7 +95,7 @@ var App = function(){
 	self.app.get ('/login', 		self.routes['login']);
 	self.app.post('/try-login', 	self.routes['try-login']);
 	self.app.get ('*', function(req, res) {
-		res.status(404).send('HTTP 404g');
+		res.status(404).send('HTTP 404');
 	});
 
 	// Logic to open a database connection.
