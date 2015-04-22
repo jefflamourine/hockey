@@ -3,6 +3,7 @@
 var express = require('express');
 var mongodb = require('mongodb');
 var pwhash = require('password-hash');
+var session = require('client-sessions');
 var Q = require('q');
 
 var App = function(){
@@ -27,6 +28,13 @@ var App = function(){
 	// Routes
 	self.routes = {};
 	self.routes['health'] = function(req, res){ res.send('1'); };
+	self.routes['session'] = function(req, res) {
+		if (req.session && req.session.account) {
+			res.send(req.session.account.username);
+		} else {
+			res.send("No valid session");
+		}
+	};
 	self.routes['root'] = function(req, res) { res.render('index.html'); };
 
 	// Registration form & form post
@@ -46,7 +54,12 @@ var App = function(){
 
 		self.accountCollection.findOne( {"username": name}, function(err, account) {
 			if (account) {
-				res.send( {"User": account, "Password": password, "Verify": pwhash.verify(password, account.password)} );				
+				if (pwhash.verify(password, account.password)) {
+					req.session.account = account;
+					res.send( "Logged in as: " + account.username );
+				} else {
+					res.redirect('/');
+				}
 			} else {
 				res.redirect('/');
 			}
@@ -66,13 +79,24 @@ var App = function(){
 		extended: true
 	})); 
 
+	self.app.use(session({
+		cookieName: 'session',
+		secret: 'random_string_goes_here',
+		duration: 30 * 60 * 1000,
+		activeDuration: 5 * 60 * 1000,
+	}));
+
 	// URL Mappings
 	self.app.get ('/health', 		self.routes['health']);
+	self.app.get ('/session',		self.routes['session']);
 	self.app.get ('/', 				self.routes['root']);
 	self.app.get ('/register', 		self.routes['register']);
 	self.app.post('/try-register', 	self.routes['try-register']);
 	self.app.get ('/login', 		self.routes['login']);
 	self.app.post('/try-login', 	self.routes['try-login']);
+	self.app.get ('*', function(req, res) {
+		res.status(404).send('HTTP 404g');
+	});
 
 	// Logic to open a database connection.
 	self.connectDb = function(callback){
