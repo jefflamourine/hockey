@@ -1,18 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
 <html>
 	<head>
+		<title> Register <title>
 		<link rel="stylesheet" type="text/css" href="main.css">
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<script type="text/javascript" src="/zxcvbn-async.js"></script>	
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	</head>
 	<body>
 		<div id="logincontainer">
 			<div id="loginform">
 				<form method="post" action="/try-register">
-					<input type="text" class="loginField" placeholder="Username" name="data[name]">
-					<input type="password" class="loginField" placeholder="Password" name="data[password]">
-					<input type="submit" value="Register" class="submit"></input>
+					<input type="text"     id="userField" class="loginField" placeholder="Username" name="data[name]">
+					<input type="password" id="passField" class="loginField" placeholder="Password" name="data[password]">
+					<input type="submit"   class="submit" value="Register" ></input>
 				</form>
 			</div>
 		</div>
 	</body>
+	<script type="text/javascript">
+
+	$('#passField').on('input', function() { 
+	    console.log(zxcvbn($(this).val()).score);
+	});
+
+	</script>
 </html>
 
