@@ -29,7 +29,7 @@ var App = function(){
 	self.routes = {};
 
 	self.routes['root'] = function(req, res){
-		res.render('test', { title : 'Home' });
+		res.render('index', {title: 'Home'});
 	};
 
 	self.routes['health'] = function(req, res){ res.send('1'); };
@@ -42,6 +42,10 @@ var App = function(){
 	};
 
 	// Registration form & form post
+	self.routes['register'] = function(req, res) {
+		res.render('register', {title: 'Register'});
+	};
+
 	self.routes['try-register'] = function(req, res) {
 		var name = req.body.data.name;
 		var password = req.body.data.password;
@@ -50,6 +54,10 @@ var App = function(){
 	};
 
 	// Login form & form post
+	self.routes['login'] = function(req, res) {
+		res.render('login', {title: 'Login'});
+	}
+
 	self.routes['try-login'] = function(req, res) {
 		var name = req.body.data.name;
 		var password = req.body.data.password;
@@ -58,7 +66,7 @@ var App = function(){
 			if (account) {
 				if (pwhash.verify(password, account.password)) {
 					req.session.account = account;
-					res.redirect('/dashboard.html');
+					res.redirect('/dashboard');
 				} else {
 					res.redirect('/');
 				}
@@ -68,6 +76,17 @@ var App = function(){
 		});
 	};
 
+	self.routes['dashboard'] = function(req, res) {
+		var name = "";
+		console.log(req.session);
+		if (req.session && req.session.account) {
+			name = req.session.account.username;
+		} else {
+			name = "No valid session";
+		}
+		res.render('dashboard', {title: 'Dashboard', name: name});
+	}
+
 	self.routes['try-logout'] = function(req, res) {
 		req.session.reset();
 		res.redirect('/');
@@ -76,12 +95,12 @@ var App = function(){
 	// Create app
 	self.app = express();
 
+	// Serve static html from /public
+	self.app.use(express.static(__dirname + '/public'));
+
 	// Set up app to use jade
 	self.app.set('views', __dirname + '/views')
 	self.app.set('view engine', 'jade')
-
-	// Serve static html from /public
-	self.app.use(express.static(__dirname + '/public'));
 
 	var bodyParser = require('body-parser');
 
@@ -101,7 +120,10 @@ var App = function(){
 	self.app.get ('/',				self.routes['root']);
 	self.app.get ('/health', 		self.routes['health']);
 	self.app.get ('/session',		self.routes['session']);
+	self.app.get ('/register',		self.routes['register']);
 	self.app.post('/try-register', 	self.routes['try-register']);
+	self.app.get ('/login',			self.routes['login']);
+	self.app.get ('/dashboard',		self.routes['dashboard']);
 	self.app.post('/try-login', 	self.routes['try-login']);
 	self.app.get ('/try-logout',	self.routes['try-logout']);
 
