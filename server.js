@@ -172,7 +172,7 @@ var App = function(){
 		var deferred = Q.defer();
 
 		self.accountCollection.findOne( {"username": name}, function(err, account) {
-			if (account) {
+			if (account || password === "") {
 				deferred.resolve(false);
 			} else {
 				self.insertAccount(name, password);
