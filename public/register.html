@@ -6,6 +6,36 @@
 		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 		<script type="text/javascript" src="/zxcvbn-async.js"></script>	
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script>
+		$('#passField').on('input', function() { 
+			var val = $(this).val();
+			var score = zxcvbn(val).score;
+			var strengthClass = "none"
+			if (val !== "") {
+				switch(score) {
+					case 0:
+						strengthClass = "weak";
+						break;
+					case 1:
+						strengthClass = "medium";
+						break;
+					case 2:
+						strengthClass = "medium";
+						break;
+					case 3:
+						strengthClass = "strong";
+						break;
+					case 4:
+						strengthClass = "strong";
+						break;
+					default:
+						strengthClass = "none";
+				}
+			}
+			$('#submit').attr('class', strengthClass);
+		});
+		</script>
+
 	</head>
 	<body>
 		<div id="logincontainer">
@@ -13,41 +43,11 @@
 				<form method="post" action="/try-register">
 					<input type="text"	 id="userField" class="loginField" placeholder="Username" name="data[name]">
 					<input type="password" id="passField" class="loginField" placeholder="Password" name="data[password]">
-					<input type="submit"   id="submit"	class="none" value="Register" ></input>
+					<input type="submit"   id="submit"	class="none" value="Register" >
 				</form>
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript">
 
-	$('#passField').on('input', function() { 
-		var val = $(this).val();
-		var score = zxcvbn(val).score;
-		var strengthClass = "none"
-		if (val !== "") {
-			switch(score) {
-				case 0:
-					strengthClass = "weak";
-					break;
-				case 1:
-					strengthClass = "medium";
-					break;
-				case 2:
-					strengthClass = "medium";
-					break;
-				case 3:
-					strengthClass = "strong";
-					break;
-				case 4:
-					strengthClass = "strong";
-					break;
-				default:
-					strengthClass = "none";
-			}
-		}
-		$('#submit').attr('class', strengthClass);
-	});
-
-	</script>
 </html>
 
