@@ -35,10 +35,8 @@ var App = function(){
 			res.send("No valid session");
 		}
 	};
-	self.routes['root'] = function(req, res) { res.render('index.html'); };
 
 	// Registration form & form post
-	self.routes['register'] = function(req, res) { res.render('register.html'); };
 	self.routes['try-register'] = function(req, res) {
 		var name = req.body.data.name;
 		var password = req.body.data.password;
@@ -47,7 +45,6 @@ var App = function(){
 	};
 
 	// Login form & form post
-	self.routes['login'] = function(req, res) { res.render('login.html'); };
 	self.routes['try-login'] = function(req, res) {
 		var name = req.body.data.name;
 		var password = req.body.data.password;
@@ -56,7 +53,7 @@ var App = function(){
 			if (account) {
 				if (pwhash.verify(password, account.password)) {
 					req.session.account = account;
-					res.send( "Logged in as: " + account.username );
+					res.redirect('/dashboard.html');
 				} else {
 					res.redirect('/');
 				}
@@ -64,6 +61,11 @@ var App = function(){
 				res.redirect('/');
 			}
 		});
+	};
+
+	self.routes['try-logout'] = function(req, res) {
+		req.session.reset();
+		res.redirect('/index.html');
 	};
 
 	// Create app
@@ -89,11 +91,9 @@ var App = function(){
 	// URL Mappings
 	self.app.get ('/health', 		self.routes['health']);
 	self.app.get ('/session',		self.routes['session']);
-	self.app.get ('/', 				self.routes['root']);
-	self.app.get ('/register', 		self.routes['register']);
 	self.app.post('/try-register', 	self.routes['try-register']);
-	self.app.get ('/login', 		self.routes['login']);
 	self.app.post('/try-login', 	self.routes['try-login']);
+	self.app.get ('/try-logout',	self.routes['try-logout']);
 	self.app.get ('*', function(req, res) {
 		res.status(404).send('HTTP 404');
 	});
