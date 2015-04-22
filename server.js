@@ -27,6 +27,11 @@ var App = function(){
 
 	// Routes
 	self.routes = {};
+
+	self.routes['root'] = function(req, res){
+		res.render('test', { title : 'Home' });
+	};
+
 	self.routes['health'] = function(req, res){ res.send('1'); };
 	self.routes['session'] = function(req, res) {
 		if (req.session && req.session.account) {
@@ -65,11 +70,15 @@ var App = function(){
 
 	self.routes['try-logout'] = function(req, res) {
 		req.session.reset();
-		res.redirect('/index.html');
+		res.redirect('/');
 	};
 
 	// Create app
 	self.app = express();
+
+	// Set up app to use jade
+	self.app.set('views', __dirname + '/views')
+	self.app.set('view engine', 'jade')
 
 	// Serve static html from /public
 	self.app.use(express.static(__dirname + '/public'));
@@ -89,11 +98,13 @@ var App = function(){
 	}));
 
 	// URL Mappings
+	self.app.get ('/',				self.routes['root']);
 	self.app.get ('/health', 		self.routes['health']);
 	self.app.get ('/session',		self.routes['session']);
 	self.app.post('/try-register', 	self.routes['try-register']);
 	self.app.post('/try-login', 	self.routes['try-login']);
 	self.app.get ('/try-logout',	self.routes['try-logout']);
+
 	self.app.get ('*', function(req, res) {
 		res.status(404).send('HTTP 404');
 	});
