@@ -11,10 +11,9 @@
 		<div id="logincontainer">
 			<div id="loginform">
 				<form method="post" action="/try-register">
-					<input type="text"     id="userField" class="loginField" placeholder="Username" name="data[name]">
+					<input type="text"	 id="userField" class="loginField" placeholder="Username" name="data[name]">
 					<input type="password" id="passField" class="loginField" placeholder="Password" name="data[password]">
-					<div id="passwordStrength" class="none"></div>
-					<input type="submit"   class="submit" value="Register" ></input>
+					<input type="submit"   id="submit"	class="none" value="Register" ></input>
 				</form>
 			</div>
 		</div>
@@ -22,7 +21,31 @@
 	<script type="text/javascript">
 
 	$('#passField').on('input', function() { 
-	    console.log(zxcvbn($(this).val()).score);
+		var val = $(this).val();
+		var score = zxcvbn(val).score;
+		var strengthClass = "none"
+		if (val !== "") {
+			switch(score) {
+				case 0:
+					strengthClass = "weak";
+					break;
+				case 1:
+					strengthClass = "medium";
+					break;
+				case 2:
+					strengthClass = "medium";
+					break;
+				case 3:
+					strengthClass = "strong";
+					break;
+				case 4:
+					strengthClass = "strong";
+					break;
+				default:
+					strengthClass = "none";
+			}
+		}
+		$('#submit').attr('class', strengthClass);
 	});
 
 	</script>

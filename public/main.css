@@ -63,7 +63,7 @@ html {
 	outline: 0;
 }
 
-.submit {
+#submit {
 	display: inline-block;
 	height: 40px;
 	color: #ffffff;
@@ -72,15 +72,30 @@ html {
 	text-decoration: none;
 	position: relative;
 	top: 45%;
-	border: 0;
 }
 
-.submit:hover, .button:hover {
+#submit:hover, .button:hover {
 	background: #A5A;
 }
 
 input {
 	text-align: center;
+}
+
+.none {
+	border: 2px solid #949;
+}
+
+.weak {
+	border: 2px solid #F00;
+}
+
+.medium {
+	border: 2px solid #FF0;
+}
+
+.strong {
+	border: 2px solid #0F0;
 }
 
 /* Form placeholder colors */
