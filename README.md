@@ -13,10 +13,10 @@ Current Features:
 
 - Responsive(ish) links & forms
 
-To do:
-
 - Register page functionality:
 	- Client side form checking
 		- Username and password validity, password strength
 	- Server side user validity checks
 		- Duplicate users
+
+To do:
