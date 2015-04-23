@@ -11,8 +11,8 @@ html
 		div#logincontainer
 			div#loginform
 				form(method='get', action='')
-					input#userField.loginField(type='text', placeholder='Username', name='data[name]')
-					input#passField.loginField(type='password', placeholder='Password', name='data[password]')
+					input#userField.loginField(type='text', placeholder='Username')
+					input#passField.loginField(type='password', placeholder='Password')
 					input#submit.none(type='button', value='Register', onclick='tryRegister();')
 		script.
 			$('#passField').on('input', function() { 

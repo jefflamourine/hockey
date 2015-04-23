@@ -1,0 +1,15 @@
+doctype
+html
+	head
+		meta(charset='UTF-8')
+		title #{title}
+		link(rel='stylesheet', href='/main.css')
+		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
+	body
+		div#logincontainer
+			div#loginform
+				form(method='post', action='/try-submit-goals')
+					input#scorer.loginField(type='text', placeholder='Scored by', name='data[scorer]')
+					input#assister.loginField(type='text', placeholder='Assisted by', name='data[assister]')
+					input#date.loginField(type='text', placeholder='Date (default = today)', name='data[date]')
+					input#submit.none(type='submit', value='Submit')

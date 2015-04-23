@@ -24,6 +24,7 @@ var App = function(){
 	self.dbServer = new mongodb.Server(self.mongoHost, self.mongoPort);
 	self.db = new mongodb.Db(self.mongoDbName, self.dbServer, {auto_reconnect: true});
 	self.accountCollection = self.db.collection('account');
+	self.goalCollection = self.db.collection('goal');
 
 	// Routes
 	self.routes = {};
@@ -89,6 +90,27 @@ var App = function(){
 		res.redirect('/');
 	};
 
+	self.routes['submit-goals'] = function(req, res) {
+		res.render('submit-goals', {title: 'Submit Goals'});
+	}
+
+	self.routes['try-submit-goals'] = function(req, res) {
+		var scorer = req.body.data.scorer;
+		var assister = req.body.data.assister;
+		var date = req.body.data.date;
+
+		var goal = {scorer: scorer, assister: assister, date: date};
+
+		self.goalCollection.insert(goal);
+
+		self.sendGoals(res, {});
+		//self.sendGoals(res, {scorer: "Piz"});
+	}
+
+	self.routes['goals'] = function(req, res) {
+		res.render('goals', {title:'Goals'});
+	}
+
 	// Create app
 	self.app = express();
 
@@ -114,15 +136,18 @@ var App = function(){
 	}));
 
 	// URL Mappings
-	self.app.get ('/',				self.routes['root']);
-	self.app.get ('/health', 		self.routes['health']);
-	self.app.get ('/session',		self.routes['session']);
-	self.app.get ('/register',		self.routes['register']);
-	self.app.post('/try-register', 	self.routes['try-register']);
-	self.app.get ('/login',			self.routes['login']);
-	self.app.get ('/dashboard',		self.routes['dashboard']);
-	self.app.post('/try-login', 	self.routes['try-login']);
-	self.app.get ('/try-logout',	self.routes['try-logout']);
+	self.app.get ('/',					self.routes['root']);
+	self.app.get ('/health', 			self.routes['health']);
+	self.app.get ('/session',			self.routes['session']);
+	self.app.get ('/register',			self.routes['register']);
+	self.app.post('/try-register', 		self.routes['try-register']);
+	self.app.get ('/login',				self.routes['login']);
+	self.app.get ('/dashboard',			self.routes['dashboard']);
+	self.app.post('/try-login', 		self.routes['try-login']);
+	self.app.get ('/try-logout',		self.routes['try-logout']);
+	self.app.get ('/submit-goals',		self.routes['submit-goals']);
+	self.app.post('/try-submit-goals',	self.routes['try-submit-goals']);
+	self.app.get ('/goals',				self.routes['goals']);
 
 	self.app.get ('*', function(req, res) {
 		res.status(404).send('HTTP 404');
@@ -197,6 +222,13 @@ var App = function(){
 				res.send("Unsuccessful");
 			}
 		}
+	}
+
+	self.sendGoals = function(res, query) {
+		var goalCursor = self.goalCollection.find(query);
+		goalCursor.toArray(function(err, goals) {
+			res.send(goals);
+		});
 	}
 };
 
