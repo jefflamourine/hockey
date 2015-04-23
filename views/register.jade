@@ -10,10 +10,10 @@ html
 	body
 		div#logincontainer
 			div#loginform
-				form(method='post', action='/try-register')
+				form(method='get', action='')
 					input#userField.loginField(type='text', placeholder='Username', name='data[name]')
 					input#passField.loginField(type='password', placeholder='Password', name='data[password]')
-					input#submit.none(type='submit', value='Register')
+					input#submit.none(type='button', value='Register', onclick='tryRegister();')
 		script.
 			$('#passField').on('input', function() { 
 				var val = $(this).val();
@@ -42,6 +42,19 @@ html
 				}
 				$('#submit').attr('class', strengthClass);
 			});
+
+			function tryRegister() {
+				var name = $('#userField').val();
+				var password = $('#passField').val();
+				$.ajax({
+					url: '/try-register',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify( {name: name, password: password} )
+				}).done(function(data) {
+					console.log(data);
+				});
+			}
 
 
 

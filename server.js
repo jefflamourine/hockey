@@ -47,8 +47,8 @@ var App = function(){
 	};
 
 	self.routes['try-register'] = function(req, res) {
-		var name = req.body.data.name;
-		var password = req.body.data.password;
+		var name = req.body.name;
+		var password = req.body.password;
 
 		self.registerAccount(name, password).then(self.sendRegisterResult(req, res));
 	};
@@ -77,14 +77,11 @@ var App = function(){
 	};
 
 	self.routes['dashboard'] = function(req, res) {
-		var name = "";
-		console.log(req.session);
 		if (req.session && req.session.account) {
-			name = req.session.account.username;
+			res.render('dashboard', {title: 'Dashboard', name: req.session.account.username});
 		} else {
-			name = "No valid session";
+			res.redirect('/');
 		}
-		res.render('dashboard', {title: 'Dashboard', name: name});
 	}
 
 	self.routes['try-logout'] = function(req, res) {
