@@ -21,4 +21,17 @@ To do:
 	- Redirect away when no session
 	- Show current session
 	- Logout capabilities
-	
+
+
+Administrating (Local) MongoDB:
+
+- Starting from fresh:
+	1. Add admin user
+		- use admin
+		- db.addUser( { user: "<username> (user)",
+						pwd: "<password> (pass)",
+						roles: [ "userAdminAnyDatabase" ] } )
+	2. Add collections
+		- use hockey
+		- db.createCollection("account", {capped: false, size: 524288, max: 5000})
+		- db.createCollection("game", {capped: false, size: 5242880, max: 50000})
