@@ -62,7 +62,7 @@ var App = function(){
 	// Login form & form post
 	self.routes['login'] = function(req, res) {
 		res.render('login', {title: 'Login'});
-	}
+	};
 
 	self.routes['try-login'] = function(req, res) {
 		var name = req.body.data.name;
@@ -88,33 +88,34 @@ var App = function(){
 		} else {
 			res.redirect('/');
 		}
-	}
+	};
 
 	self.routes['try-logout'] = function(req, res) {
 		req.session.reset();
 		res.redirect('/');
 	};
 
+	self.routes['goals'] = function(req, res) {
+		self.getGoals({}).then(function(goals) {
+			res.render('goals', {title: "Goals", goals: goals} );
+		});
+	};
+
 	self.routes['submit-goals'] = function(req, res) {
 		res.render('submit-goals', {title: 'Submit Goals'});
-	}
+	};
 
 	self.routes['try-submit-goals'] = function(req, res) {
 		var scorer = req.body.data.scorer;
 		var assister = req.body.data.assister;
-		var date = req.body.data.date;
+		var game = req.body.data.game;
 
-		var goal = {scorer: scorer, assister: assister, date: date};
+		var goal = {scorer: scorer, assister: assister, game: game};
 
 		self.goalCollection.insert(goal);
 
-		self.sendGoals(res, {});
-		//self.sendGoals(res, {scorer: "Piz"});
-	}
-
-	self.routes['goals'] = function(req, res) {
-		res.render('goals', {title:'Goals'});
-	}
+		res.redirect('/goals');
+	};
 
 	// Create app
 	self.app = express();
@@ -209,7 +210,7 @@ var App = function(){
 		});
 
 		return deferred.promise;
-	}
+	};
 
 	// Curry send register result to use given req/res pair and take a success boolean
 	self.sendRegisterResult = function(req, res) {
@@ -220,14 +221,17 @@ var App = function(){
 				res.send("Unsuccessful");
 			}
 		}
-	}
+	};
 
-	self.sendGoals = function(res, query) {
+	self.getGoals = function(query) {
+		var deferred = Q.defer();
+
 		var goalCursor = self.goalCollection.find(query);
 		goalCursor.toArray(function(err, goals) {
-			res.send(goals);
+			deferred.resolve(goals);
 		});
-	}
+		return deferred.promise;
+	};
 };
 
 // Make a new express app
