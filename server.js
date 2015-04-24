@@ -6,6 +6,11 @@ var pwhash = require('password-hash');
 var session = require('client-sessions');
 var Q = require('q');
 
+function createAccount(name, password) {
+	var hashedPassword = pwhash.generate(password);
+	return {"username": name, "password": hashedPassword, "permissions": [] };
+}
+
 var App = function(){
 
 	// Scope
@@ -197,20 +202,13 @@ var App = function(){
 			if (account || password === "") {
 				deferred.resolve(false);
 			} else {
-				self.insertAccount(name, password);
+				var account = createAccount(name, password);
+				self.accountCollection.insert(account);
 				deferred.resolve(true);
 			}
 		});
 
 		return deferred.promise;
-	}
-
-	// Insert account with given details and no permissions
-	self.insertAccount = function(name, password) {
-		var hashedPassword = pwhash.generate(password);
-		var account = {"username": name, "password": hashedPassword, "permissions": [] };
-
-		self.accountCollection.insert(account);
 	}
 
 	// Curry send register result to use given req/res pair and take a success boolean
