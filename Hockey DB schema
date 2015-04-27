@@ -1,0 +1,115 @@
+Hockey DB schema
+
+var gameSchema = new mongoose.Schema({
+	date: Date,
+	time: Time,
+	blue: <Team>,
+	bluePlayedGames: { forwards: [<Players>], defense: [<Players>], goalies: [<Players>] }
+	blueScore: Number,
+	red: <Team>,
+	redPlayedGames: { forwards: [<Players>], defense: [<Players>], goalies: [<Players>] }
+	redScore: Number
+});
+
+var goalSchema = new mongoose.Schema({
+	scorer: <Player>,
+	assister: <Player>,
+	game: <Game>
+});
+
+var teamSchema = new.mongoose.Schema({
+	name: String
+	roster: [<Players>]
+});
+
+var playerSchema = new.mongoose.Schema({
+	name: String,
+	active: Boolean,
+	gamesPlayed: Number
+});
+
+How data would be initialized:
+
+- Games pregenerated when schedule is created:
+	- date:
+	- dime:
+	- blue:
+	- bluePlayedGames: { forwards: [], defense: [], goalies: [] }
+	- blueScore: -1
+	- red:
+	- redPlayedGames: { forwards: [], defense: [], goalies: [] }
+	- redScore: -1
+
+- Teams generated from draft:
+	- roster: [<Players>]
+
+- Players generated from signups:
+	- name: <Name>
+	- active: True
+
+- No pregenerated goals
+
+How data would be manipulated:
+
+- Adding games should never occur outside of season start
+	- Modifiying games:
+		- change <color>PlayedGames to add players who played in each position for that team
+			- Add 1 game played/GP@G for each player added to these lists
+		- scores will be taken care of by adding goals
+
+- Adding teams should never occur outside of season start
+	- Modifying team
+		- Trades:
+			- GameSchema: no change, directly references players who played
+			- GoalSchema: no change, directly references players & can get team for from players hard referenced in game
+			- TeamSchema: swap player refs
+			- PlayerSchema: no change, player team retrieved from Team.roster not player itself
+		- Retirement:
+			- Game and Goal same as trade
+			- TeamSchema: drop player ref
+			- PlayerSchema: set active: false
+		- Waiver addition:
+			- TeamSchema: add player ref
+			- PlayerSchema: set active: true
+- Add players with name and active: false
+	- Modifying player:
+		- Name: E.Z.
+		- Active:
+			- See Team->Modifying->Retirement
+			- See Team->Modifying->Waiver addition
+		- Games played:
+			- See Games->Modifying-><Color>PlayedGames
+- Add goals with scorer: <Player>, assister: <Player>, game <Game>
+	- When goals are added, the referenced game's blue score and red score should be set by checking <Color>GamesPlayer for each scorer
+	- Goals should never be modified after submitting
+
+How data is retrieved: 
+
+- Game winner:
+	redScore > blueScore ? red : blue
+- Team records:
+	get all game winner, count for each team
+- Player goals:
+	goal where scorer = player
+- Player assists
+	goal where assister = player
+- Player points
+	player goals + player assists
+- Player games played
+	<player>.gamesPlayed
+- Player PPG
+	points/gamesplayed
+- Player GPG
+	goals/gamesplayed
+- Player point combination
+	goals where scorer = player1|player2 and assister = player1|player2
+- Team g/p/a
+	for player : team { team g/p/a += player g/p/a }
+- Standings
+	team.each.record.sort
+
+
+
+
+
+

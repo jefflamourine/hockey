@@ -8,9 +8,11 @@ html
 	body
 		table.h-center.v-center
 			tr.table-header
-				td Scorer 
-				td Assister
-			for goal in goals
+				td Name 
+				td Active
+				td Games Played
+			for player in players
 				tr
-					td= goal.scorer
-					td= goal.assister
+					td= player.name
+					td= player.active
+					td= player.gamesPlayed
