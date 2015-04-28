@@ -31,7 +31,15 @@ Administrating (Local) MongoDB:
 		- db.addUser( { user: "<username> (user)",
 						pwd: "<password> (pass)",
 						roles: [ "userAdminAnyDatabase" ] } )
-	2. Add collections
+	2. Add hockey user
+		- use hockey
+		- db.addUser( { user: "user",
+						pwd : "pass",
+						roles: [ "readWrite", "dbAdmin" ] } )
+	
+	// VV Unneeded VV //
+
+	3. Add collections
 		- use hockey
 		- db.createCollection("account", {capped: false, size: 524288, max: 5000})
 		- db.createCollection("goal", {capped: false, size: 5242880, max: 50000})

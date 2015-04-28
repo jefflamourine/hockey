@@ -8,6 +8,8 @@ html
 		script(type='text/javascript', src='/zxcvbn-async.js')
 		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
 	body
+		div#header(style='display:none;')
+			| Registration was not successful!
 		div#logincontainer
 			div#loginform
 				form(method='get', action='')
@@ -44,15 +46,17 @@ html
 			});
 
 			function tryRegister() {
-				var name = $('#userField').val();
+				var username = $('#userField').val();
 				var password = $('#passField').val();
 				$.ajax({
 					url: '/try-register',
 					type: 'POST',
 					contentType: 'application/json',
-					data: JSON.stringify( {name: name, password: password} )
+					data: JSON.stringify( {username: username, password: password} )
 				}).done(function(data) {
-					console.log(data);
+					if (!data) {
+						$( '#header' ).show();
+					}
 				});
 			}
 

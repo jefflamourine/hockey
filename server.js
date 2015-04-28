@@ -1,15 +1,11 @@
 #!/bin/env node
 
 var express = require('express');
-var mongodb = require('mongodb');
+var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 var pwhash = require('password-hash');
 var session = require('client-sessions');
 var Q = require('q');
-
-function createAccount(name, password) {
-	var hashedPassword = pwhash.generate(password);
-	return {"username": name, "password": hashedPassword, "permissions": [] };
-}
 
 var App = function(){
 
@@ -23,16 +19,211 @@ var App = function(){
 	self.mongoPort 		= parseInt(process.env.OPENSHIFT_MONGODB_DB_PORT) 	|| 27017;
 	self.mongoDbName 	= process.env.OPENSHIFT_APP_NAME 					|| 'hockey'
 	self.dbUser 		= process.env.OPENSHIFT_MONGODB_DB_USERNAME 		|| 'user';
-	self.dbPass 		= process.env.OPENSHIFT_MONGODB_DB_PASSWORD 		|| 'pass'
+	self.dbPass 		= process.env.OPENSHIFT_MONGODB_DB_PASSWORD 		|| 'pass';
 
-	// Mongo intialization
-	self.dbServer = new mongodb.Server(self.mongoHost, self.mongoPort);
-	self.db = new mongodb.Db(self.mongoDbName, self.dbServer, {auto_reconnect: true});
-	self.accountCollection = self.db.collection('account');
-	self.goalCollection = self.db.collection('goal');
-	self.playerCollection = self.db.collection('player');
-	self.teamCollection = self.db.collection('team');
-	self.gameCollection = self.db.collection('game');
+	// Mongoose setup
+
+	var Schema = mongoose.Schema;
+
+	var mongoConnectionString = "mongodb://" + self.dbUser + ":" + self.dbPass+ "@" + self.mongoHost + ":" + self.mongoPort + "/" + self.mongoDbName;
+	mongoose.connect(mongoConnectionString);
+
+	var db = mongoose.connection;
+
+	db.on('error', console.error);
+
+	var accountSchema = new Schema({
+		username: { type: String, unique: true },
+		password: String,
+		permissions: [String]
+	});
+
+	accountSchema.plugin(uniqueValidator);
+
+	var playerSchema = new Schema({
+		name: { type: String, unique: true },
+		active: Boolean,
+		gamesPlayed: Number
+	});
+
+	playerSchema.plugin(uniqueValidator);
+
+	var teamSchema = new Schema({
+		name: { type: String, unique: true },
+		roster: [{ type : Schema.Types.ObjectId, ref: 'Player' }]
+	});
+
+	teamSchema.plugin(uniqueValidator);
+
+	var goalSchema = new Schema({
+		scorer: Schema.Types.ObjectId,
+		assister: Schema.Types.ObjectId,
+		game: Schema.Types.ObjectId
+	});
+
+	var gameSchema = new Schema({
+		date: Date,
+		blue: Schema.Types.ObjectId,
+		bluePlayedGames: { forwards: [Schema.Types.ObjectId],
+							defense: [Schema.Types.ObjectId],
+							goalies: [Schema.Types.ObjectId] },
+		blueScore: Number,
+		red: Schema.Types.ObjectId,
+		redPlayedGames: {  forwards: [Schema.Types.ObjectId],
+							defense: [Schema.Types.ObjectId],
+							goalies: [Schema.Types.ObjectId] },
+		redScore: Number
+	});
+
+	var Account = mongoose.model('Account', accountSchema);
+	var Player = mongoose.model('Player', playerSchema);
+	var Team = mongoose.model('Team', teamSchema);
+	var Goal = mongoose.model('Goal', goalSchema);
+	var Game = mongoose.model('Game', gameSchema);
+
+	new Player({
+		name: "player1",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player2",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player3",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player4",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player5",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player6",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player7",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+	new Player({
+		name: "player8",
+		active: true,
+		gamesPlayed: 0
+	}).save(function (err, player){console.log(err); console.log(player)});
+
+	new Team({
+		name: "team1",
+		roster: [mongoose.Types.ObjectId("553fdd18bdabb04213601e88"),
+					mongoose.Types.ObjectId("553fdde857c10748138e5d5d")]
+	}).save(function (err, team){console.log(err); console.log(team)});
+	new Team({
+		name: "team2",
+		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d62"),
+					mongoose.Types.ObjectId("553fdde857c10748138e5d5f")]
+	}).save(function (err, team){console.log(err); console.log(team)});
+	new Team({
+		name: "team3",
+		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d60"),
+					mongoose.Types.ObjectId("553fdde857c10748138e5d61")]
+	}).save(function (err, team){console.log(err); console.log(team)});
+	new Team({
+		name: "team4",
+		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d5e"),
+					mongoose.Types.ObjectId("553fdde857c10748138e5d63")]
+	}).save(function (err, team){console.log(err); console.log(team)});
+
+	new Game({
+		date: new Date(),
+		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0b"),
+		bluePlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d62")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d5f")],
+			goalies: []},
+		blueScore: 2,
+		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0c"),
+		redPlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d60")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d61")],
+			goalies: []},
+		redScore: 1
+	}).save(function (err, game){console.log(err); console.log(game)});
+
+	new Game({
+		date: new Date(),
+		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0a"),
+		bluePlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdd18bdabb04213601e88")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d5d")],
+			goalies: []},
+		blueScore: 2,
+		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0d"),
+		redPlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d5e")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d63")],
+			goalies: []},
+		redScore: 1
+	}).save(function (err, game){console.log(err); console.log(game)});
+
+	new Game({
+		date: new Date(),
+		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0b"),
+		bluePlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d62")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d5f")],
+			goalies: []},
+		blueScore: 2,
+		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0a"),
+		redPlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdd18bdabb04213601e88")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d5d")],
+			goalies: []},
+		redScore: 1
+	}).save(function (err, game){console.log(err); console.log(game)});
+
+	new Game({
+		date: new Date(),
+		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0c"),
+		bluePlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d60")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d61")],
+			goalies: []},
+		blueScore: 2,
+		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0d"),
+		redPlayedGames : {
+			forwards:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d5e")],
+			defense:
+			[mongoose.Types.ObjectId("553fdde857c10748138e5d63")],
+			goalies: []},
+		redScore: 1
+	}).save(function (err, game){console.log(err); console.log(game)});
+
+	// End Mongoose Setup
 
 	// Routes
 	self.routes = {};
@@ -61,10 +252,23 @@ var App = function(){
 
 	// Registration form submit
 	self.routes['try-register'] = function(req, res) {
-		var name = req.body.name;
+		var username = req.body.username;
 		var password = req.body.password;
+		var hashedPassword = pwhash.generate(password);
 
-		self.registerAccount(name, password).then(self.sendRegisterResult(req, res));
+		var account = new Account({
+			username: username,
+			password: hashedPassword,
+			permissions: []
+		});
+
+		account.save(function(err, account) {
+			if (account) {
+				res.send(true);
+			} else {
+				res.send(false);
+			}
+		});
 	};
 
 	// Login form
@@ -74,10 +278,10 @@ var App = function(){
 
 	// Login form submit
 	self.routes['try-login'] = function(req, res) {
-		var name = req.body.data.name;
+		var username = req.body.data.username;
 		var password = req.body.data.password;
 
-		self.accountCollection.findOne( {"username": name}, function(err, account) {
+		Account.findOne({username: username}, function(err, account) {
 			if (account) {
 				if (pwhash.verify(password, account.password)) {
 					req.session.account = account;
@@ -94,7 +298,7 @@ var App = function(){
 	// Dashboard
 	self.routes['dashboard'] = function(req, res) {
 		if (req.session && req.session.account) {
-			res.render('dashboard', {title: 'Dashboard', name: req.session.account.username});
+			res.render('dashboard', {title: 'Dashboard', username: req.session.account.username});
 		} else {
 			res.redirect('/');
 		}
@@ -108,35 +312,42 @@ var App = function(){
 
 	// Games display page
 	self.routes['games'] = function(req, res) {
-		self.queryCollection(self.gameCollection, {}).then(function(games) {
+		Game.find({}, function(err, games) {
+			if (!games) games = [];
 			res.render('games', {title: "Games", games: games});
 		});
 	};
 
 	// Players display page
 	self.routes['players'] = function(req, res) {
-		self.queryCollection(self.playerCollection, {}).then(function(players) {
+		Player.find({}, function(err, players) {
+			if (!players) players = [];
 			res.render('players', {title: "Players", players: players});
 		});
 	};
 
 	// Teams display page
 	self.routes['teams'] = function(req, res) {
-		self.queryCollection(self.teamCollection, {}).then(function(teams) {
+		Team.find({}, function(err, teams) {
+			if (!teams) teams = [];
 			res.render('teams', {title: "Teams", teams: teams});
 		});
 	};
 
 	// Goals display page
 	self.routes['goals'] = function(req, res) {
-		self.queryCollection(self.goalCollection, {}).then(function(goals) {
+		Goal.find({}, function(err, goals) {
+			if (!goals) goals = [];
 			res.render('goals', {title: "Goals", goals: goals} );
 		});
 	};
 
 	// Goal submission form
 	self.routes['submit-goals'] = function(req, res) {
-		res.render('submit-goals', {title: 'Submit Goals'});
+		Player.find({ active:true }, function(err, players) {
+			if (!players) players = [];
+			res.render('submit-goals', {title: 'Submit Goals', players: players});
+		});
 	};
 
 	// Goal submit
@@ -145,11 +356,9 @@ var App = function(){
 		var assister = req.body.data.assister;
 		var game = req.body.data.game;
 
-		var goal = {scorer: scorer, assister: assister, game: game};
-
-		self.goalCollection.insert(goal);
-
-		res.redirect('/goals');
+		Player.findOne({username: scorer}, function(err, scorerDoc) {
+			Player.findOne({username: assister}, function(err, assisterDoc) {});
+		});
 	};
 
 	// Create app
@@ -198,71 +407,6 @@ var App = function(){
 	self.app.get ('*', function(req, res) {
 		res.status(404).send('HTTP 404');
 	});
-
-	// Check if name exists, if it doesn't, insert new account
-	// Since the Node MongoDB driver is async, use Q.defer() and return promise
-	self.registerAccount = function(name, password) {
-		var deferred = Q.defer();
-
-		self.accountCollection.findOne( {"username": name}, function(err, account) {
-			if (account || password === "") {
-				deferred.resolve(false);
-			} else {
-				var account = createAccount(name, password);
-				self.accountCollection.insert(account);
-				deferred.resolve(true);
-			}
-		});
-
-		return deferred.promise;
-	};
-
-	// Curry send register result to use given req/res pair and take a success boolean
-	self.sendRegisterResult = function(req, res) {
-		return function(successful) {
-			if (successful) {
-				res.send("Successful");
-			} else {
-				res.send("Unsuccessful");
-			}
-		}
-	};
-
-	// Return the documents from the given collection
-	// Matching the given query
-	self.queryCollection = function(collection, query) {
-		var deferred = Q.defer();
-
-		var cursor = collection.find(query);
-		cursor.toArray(function(err, docs) {
-			deferred.resolve(docs);
-		});
-		return deferred.promise;
-	};
-
-	// Return the first document in the given collection
-	// Matching the given query
-	self.findOne = function(collection, query) {
-		var deferred = Q.defer();
-
-		collection.findOne(query, function(err, doc) {
-			deferred.resolve(doc);
-		});
-		return deferred.promise;
-	};
-
-	// ----- Starting and stopping the server -----
-
-	// Logic to open a database connection.
-	self.connectDb = function(callback){
-		self.db.open(function(err, db){
-			if(err){ throw err };
-			self.db.authenticate(self.dbUser, self.dbPass, {authdb: "admin"}, function(err, res){
-			if(err){ throw err };
-			callback();
-			});
-		});
-	};
 	
 	// Starting the Node JS server with Express
 	self.startServer = function(){
@@ -294,5 +438,5 @@ var App = function(){
 var app = new App();
 
 // Connect to Mongo DB with start server callback
-app.connectDb(app.startServer);
+app.startServer();
 
