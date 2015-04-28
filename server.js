@@ -32,6 +32,7 @@ var App = function(){
 	self.goalCollection = self.db.collection('goal');
 	self.playerCollection = self.db.collection('player');
 	self.teamCollection = self.db.collection('team');
+	self.gameCollection = self.db.collection('game');
 
 	// Routes
 	self.routes = {};
@@ -103,6 +104,13 @@ var App = function(){
 	self.routes['try-logout'] = function(req, res) {
 		req.session.reset();
 		res.redirect('/');
+	};
+
+	// Games display page
+	self.routes['games'] = function(req, res) {
+		self.queryCollection(self.gameCollection, {}).then(function(games) {
+			res.render('games', {title: "Games", games: games});
+		});
 	};
 
 	// Players display page
@@ -184,6 +192,7 @@ var App = function(){
 	self.app.get ('/goals',				self.routes['goals']);
 	self.app.get ('/players',			self.routes['players']);
 	self.app.get ('/teams',				self.routes['teams']);
+	self.app.get ('/games',				self.routes['games']);
 
 	// Any url not previously mapped -> 404
 	self.app.get ('*', function(req, res) {

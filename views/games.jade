@@ -1,0 +1,22 @@
+doctype
+html
+	head
+		meta(charset='UTF-8')
+		title #{title}
+		link(rel='stylesheet', href='/main.css')
+		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
+	body
+		table.h-center.v-center
+			tr.table-header
+				td Date 
+				td Blue
+				td 
+				td
+				td Red
+			for game in games
+				tr
+					td= game.date
+					td= game.blue
+					td= game.blueScore
+					td= game.redScore
+					td= game.red

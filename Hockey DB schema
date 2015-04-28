@@ -1,13 +1,12 @@
 Hockey DB schema
 
 var gameSchema = new mongoose.Schema({
-	date: Date,
-	time: Time,
+	date: Date, (includes time)
 	blue: <Team>,
-	bluePlayedGames: { forwards: [<Players>], defense: [<Players>], goalies: [<Players>] }
+	bluePlayedGames: { forwards: [<Players>], defense: [<Players>], goalies: [<Players>] },
 	blueScore: Number,
 	red: <Team>,
-	redPlayedGames: { forwards: [<Players>], defense: [<Players>], goalies: [<Players>] }
+	redPlayedGames: { forwards: [<Players>], defense: [<Players>], goalies: [<Players>] },
 	redScore: Number
 });
 

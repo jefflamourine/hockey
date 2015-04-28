@@ -36,3 +36,5 @@ Administrating (Local) MongoDB:
 		- db.createCollection("account", {capped: false, size: 524288, max: 5000})
 		- db.createCollection("goal", {capped: false, size: 5242880, max: 50000})
 		- db.createCollection("player", {capped: false, size: 524288, max: 5000})
+		- db.createCollection("team", {capped: false, size: 524288, max: 2500})
+		- db.createCollection("game", {capped: false, size: 5242880, max: 10000})
