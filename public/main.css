@@ -15,7 +15,7 @@ html {
 }
 
 .h-center {
-	margin:auto ;
+	margin: auto;
 }
 
 .v-center {
@@ -61,8 +61,8 @@ td {
 	background-color: #949;
 	color: #FFF;
 	border: 0;
-	margin-left:1em;
-	margin-right:1em;
+	margin-left: 1em;
+	margin-right: 1em;
 }
 
 #logincontainer {
@@ -132,17 +132,17 @@ input {
 /* Form placeholder colors */
 
 ::-webkit-input-placeholder { /* WebKit browsers */
-	color:	#949;
+	color: #949;
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-	 color:	#949;
-	 opacity:	1;
+	 color: #949;
+	 opacity: 1;
 }
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
-	 color:	#949;
-	 opacity:	1;
+	 color: #949;
+	 opacity: 1;
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
-	 color:	#949;
+	 color: #949;
 }
 

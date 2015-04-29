@@ -290,7 +290,7 @@ var App = function() {
 
 	// Root
 	self.routes['root'] = function(req, res) {
-		res.render('index', {
+		res.render('home', {
 			title: 'Home'
 		});
 	};
