@@ -263,37 +263,37 @@ var App = function() {
 	});
 
 	player1.save(function(err, player) {
-	player2.save(function(err, player) {
-	player3.save(function(err, player) {
-	player4.save(function(err, player) {
-	player5.save(function(err, player) {
-	player6.save(function(err, player) {
-	player7.save(function(err, player) {
-	player8.save(function(err, player) {
-	team1.save(function(err, game) {
-	team2.save(function(err, game) {
-	team3.save(function(err, game) {
-	team4.save(function(err, game) {
-	game1.save(function(err, game) {
-	game2.save(function(err, game) {
-	game3.save(function(err, game) {
-	game4.save(function(err, game) {
+		player2.save(function(err, player) {
+			player3.save(function(err, player) {
+				player4.save(function(err, player) {
+					player5.save(function(err, player) {
+						player6.save(function(err, player) {
+							player7.save(function(err, player) {
+								player8.save(function(err, player) {
+									team1.save(function(err, game) {
+										team2.save(function(err, game) {
+											team3.save(function(err, game) {
+												team4.save(function(err, game) {
+													game1.save(function(err, game) {
+														game2.save(function(err, game) {
+															game3.save(function(err, game) {
+																game4.save(function(err, game) {
 
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
+																});
+															});
+														});
+													});
+												});
+											});
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
 	});
 
 	// End Mongoose Setup
