@@ -15,14 +15,15 @@ html
 	body
 		div#header
 			div#left
-				div#login(onclick="location.href='/login';")
-					|Log In
-				div#register(onclick="location.href='/register';")
-					|Register
 			div#right
 				if session
 					div#session(onclick="location.href='/dashboard';")
 						|#{session}
+				else
+					div#login(onclick="location.href='/login';")
+						|Log In
+					div#register(onclick="location.href='/register';")
+						|Register
 
 		div#focus-container.h-center
 			div.focus(onclick="location.href='/games';")

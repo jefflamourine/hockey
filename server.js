@@ -7,6 +7,8 @@ var pwhash = require('password-hash');
 var session = require('client-sessions');
 var Q = require('q');
 
+var DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
 var App = function() {
 
 	// Scope
@@ -68,25 +70,58 @@ var App = function() {
 	teamSchema.plugin(uniqueValidator);
 
 	var goalSchema = new Schema({
-		scorer: Schema.Types.ObjectId,
-		assister: Schema.Types.ObjectId,
-		game: Schema.Types.ObjectId
+		scorer: {
+			type: Schema.Types.ObjectId,
+			ref: 'Player'
+		},
+		assister: {
+			type: Schema.Types.ObjectId,
+			ref: 'Player'
+		},
+		game: {
+			type: Schema.Types.ObjectId,
+			ref: 'Game'
+		}
 	});
 
 	var gameSchema = new Schema({
 		date: Date,
-		blue: Schema.Types.ObjectId,
+		blue: {
+			type: Schema.ObjectId,
+			ref: 'Team'
+		},
 		bluePlayedGames: {
-			forwards: [Schema.Types.ObjectId],
-			defense: [Schema.Types.ObjectId],
-			goalies: [Schema.Types.ObjectId]
+			forwards: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}],
+			defense: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}],
+			goalies: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}]
 		},
 		blueScore: Number,
-		red: Schema.Types.ObjectId,
+		red: {
+			type: Schema.ObjectId,
+			ref: 'Team'
+		},
 		redPlayedGames: {
-			forwards: [Schema.Types.ObjectId],
-			defense: [Schema.Types.ObjectId],
-			goalies: [Schema.Types.ObjectId]
+			forwards: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}],
+			defense: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}],
+			goalies: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}]
 		},
 		redScore: Number
 	});
@@ -101,103 +136,67 @@ var App = function() {
 		name: "player1",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player2",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player3",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player4",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player5",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player6",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player7",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 	new Player({
 		name: "player8",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {
-		console.log(err);
-		console.log(player)
-	});
+	}).save(function(err, player) {});
 
 	new Team({
 		name: "team1",
 		roster: [mongoose.Types.ObjectId("553fdd18bdabb04213601e88"),
 			mongoose.Types.ObjectId("553fdde857c10748138e5d5d")
 		]
-	}).save(function(err, team) {
-		console.log(err);
-		console.log(team)
-	});
+	}).save(function(err, team) {});
 	new Team({
 		name: "team2",
 		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d62"),
 			mongoose.Types.ObjectId("553fdde857c10748138e5d5f")
 		]
-	}).save(function(err, team) {
-		console.log(err);
-		console.log(team)
-	});
+	}).save(function(err, team) {});
 	new Team({
 		name: "team3",
 		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d60"),
 			mongoose.Types.ObjectId("553fdde857c10748138e5d61")
 		]
-	}).save(function(err, team) {
-		console.log(err);
-		console.log(team)
-	});
+	}).save(function(err, team) {});
 	new Team({
 		name: "team4",
 		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d5e"),
 			mongoose.Types.ObjectId("553fdde857c10748138e5d63")
 		]
-	}).save(function(err, team) {
-		console.log(err);
-		console.log(team)
-	});
+	}).save(function(err, team) {});
 
 	new Game({
 		date: new Date(),
@@ -215,10 +214,7 @@ var App = function() {
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {
-		console.log(err);
-		console.log(game)
-	});
+	}).save(function(err, game) {});
 
 	new Game({
 		date: new Date(),
@@ -236,10 +232,7 @@ var App = function() {
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {
-		console.log(err);
-		console.log(game)
-	});
+	}).save(function(err, game) {});
 
 	new Game({
 		date: new Date(),
@@ -257,10 +250,7 @@ var App = function() {
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {
-		console.log(err);
-		console.log(game)
-	});
+	}).save(function(err, game) {});
 
 	new Game({
 		date: new Date(),
@@ -278,10 +268,7 @@ var App = function() {
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {
-		console.log(err);
-		console.log(game)
-	});
+	}).save(function(err, game) {});
 
 	// End Mongoose Setup
 
@@ -390,10 +377,15 @@ var App = function() {
 
 	// Games display page
 	self.routes['games'] = function(req, res) {
-		Game.find({}, function(err, games) {
+		var session;
+		if (req.session && req.session.account) {
+			session = req.session.account.username;
+		}
+		var games = Game.find({}).populate('blue', 'name').populate('red', 'name').exec(function(err, games) {
 			if (!games) games = [];
 			res.render('games', {
 				title: "Games",
+				session: session,
 				games: games
 			});
 		});
@@ -401,10 +393,15 @@ var App = function() {
 
 	// Players display page
 	self.routes['players'] = function(req, res) {
+		var session;
+		if (req.session && req.session.account) {
+			session = req.session.account.username;
+		}
 		Player.find({}, function(err, players) {
 			if (!players) players = [];
 			res.render('players', {
 				title: "Players",
+				session: session,
 				players: players
 			});
 		});
@@ -412,10 +409,15 @@ var App = function() {
 
 	// Teams display page
 	self.routes['teams'] = function(req, res) {
-		Team.find({}, function(err, teams) {
+		var session;
+		if (req.session && req.session.account) {
+			session = req.session.account.username;
+		}
+		Team.find({}).populate('roster', 'name').exec(function(err, teams) {
 			if (!teams) teams = [];
 			res.render('teams', {
 				title: "Teams",
+				session: session,
 				teams: teams
 			});
 		});
@@ -423,10 +425,15 @@ var App = function() {
 
 	// Goals display page
 	self.routes['goals'] = function(req, res) {
+		var session;
+		if (req.session && req.session.account) {
+			session = req.session.account.username;
+		}
 		Goal.find({}, function(err, goals) {
 			if (!goals) goals = [];
 			res.render('goals', {
 				title: "Goals",
+				session: session,
 				goals: goals
 			});
 		});
@@ -434,12 +441,17 @@ var App = function() {
 
 	// Goal submission form
 	self.routes['submit-goals'] = function(req, res) {
+		var session;
+		if (req.session && req.session.account) {
+			session = req.session.account.username;
+		}
 		Player.find({
 			active: true
 		}, function(err, players) {
 			if (!players) players = [];
 			res.render('submit-goals', {
 				title: 'Submit Goals',
+				session: session,
 				players: players
 			});
 		});

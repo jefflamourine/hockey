@@ -46,14 +46,14 @@ html {
 	justify-content: flex-end;
 }
 
-#login, #register, #session {
+#login, #register, #session, #home {
 	width: 5rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-#login:hover, #register:hover, #session:hover {
+#login:hover, #register:hover, #session:hover, #home:hover {
 	color: #FFF;
 }
 
@@ -79,4 +79,20 @@ html {
 
 .focus:hover {
 	color: #FFF;
+}
+
+table {
+	position: relative;
+	top: 10vmin;
+	border-collapse: collapse;
+}
+
+td {
+	border: 2px solid #006A4E;
+	padding: 0.5em;
+}
+
+.table-header {
+	font-size: 16;
+	background-color: #D0D0D0;
 }
