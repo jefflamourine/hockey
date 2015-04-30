@@ -381,7 +381,10 @@ var App = function() {
 		if (req.session && req.session.account) {
 			session = req.session.account.username;
 		}
-		var games = Game.find({}).populate('blue', 'name').populate('red', 'name').exec(function(err, games) { 
+		var gamesKeepRefs = Game.find({}, function(err, games) {
+			console.log(games);
+		});
+		var games = Game.find({}).populate('blue').populate('red').exec(function(err, games) { 
 			console.log(games);
 			if (!games) games = [];
 			res.render('games', {
