@@ -29,10 +29,12 @@ html {
 	background-color: red;
 }
 
-#container {
+#focus-container {
     display: flex;
     justify-content: space-between;
     width: 80%;
+    max-width: 60em;
+    min-width: 45em;
 }
 
 .focus {
