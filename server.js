@@ -382,6 +382,7 @@ var App = function() {
 			session = req.session.account.username;
 		}
 		var games = Game.find({}).populate('blue', 'name').populate('red', 'name').exec(function(err, games) {
+			console.log(games);
 			if (!games) games = [];
 			res.render('games', {
 				title: "Games",
