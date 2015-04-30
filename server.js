@@ -455,6 +455,13 @@ var App = function() {
 		});
 	};
 
+	// Test revision homepage
+	self.routes['revision-home'] = function(req, res) {
+		res.render('finalhome', {
+			title: "Home"
+		});
+	}
+
 	// Create app
 	self.app = express();
 
@@ -496,6 +503,7 @@ var App = function() {
 	self.app.get('/players', self.routes['players']);
 	self.app.get('/teams', self.routes['teams']);
 	self.app.get('/games', self.routes['games']);
+	self.app.get('/revision-home', self.routes['revision-home']);
 
 	// Any url not previously mapped -> 404
 	self.app.get('*', function(req, res) {

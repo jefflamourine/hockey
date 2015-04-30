@@ -1,0 +1,43 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	height: 100%;
+	min-height: 100%;
+}
+
+html {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	text-align: center;
+}
+
+.h-center {
+	margin: auto;
+}
+
+.v-center {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+#header {
+	height: 3rem;
+	background-color: red;
+}
+
+#container {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.focus {
+	width: 15rem;
+	height: 15rem;
+	background-color: blue;
+}
+
