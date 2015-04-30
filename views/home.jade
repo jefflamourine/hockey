@@ -3,8 +3,8 @@ html
 	head
 		meta(charset='UTF-8')
 		title #{title}
-		link(rel='stylesheet', href='/main.css')
-		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
+		link(rel='stylesheet', href='/final.css')
+		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Roboto:400,100,300')
 		script.
 			if (document.location.hostname !== "localhost") {
 				var loc = window.location+'';
@@ -12,9 +12,22 @@ html
 					window.location.href = loc.replace('http://','https://');
 				}
 			}
-	body(style="text-align:center")
-		div#button-container
-			div.button(onclick="location.href='/login';")
-				|Login
-			div.button(onclick="location.href='/register';")
-				|Register
+	body
+		div#header
+			div#left
+				div#login(onclick="location.href='/login';")
+					|Log In
+				div#register(onclick="location.href='/register';")
+					|Register
+			div#right
+				if session
+					div#session(onclick="location.href='/dashboard';")
+						|#{session}
+
+		div#focus-container.h-center
+			div.focus(onclick="location.href='/games';")
+				|Games
+			div.focus(onclick="location.href='/players';")
+				|Players
+			div.focus(onclick="location.href='/teams';")
+				|Teams

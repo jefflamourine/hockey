@@ -9,9 +9,12 @@ html, body {
 }
 
 html {
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 14px;
+	font-weight: 300;
 	text-align: center;
+	color: #000;
+	background-color:#C0C0C0;
 }
 
 .h-center {
@@ -26,20 +29,52 @@ html {
 
 #header {
 	height: 3rem;
-	background-color: red;
+	background-color: #006A4E;
+    box-shadow: 0px 2px 5px #888;
+    display:flex;
+	justify-content: space-between;
+}
+
+#left {
+	display:flex;
+	justify-content: flex-start;
+}
+
+#right {
+	display:flex;
+	justify-content: flex-end;
+}
+
+#login, #register, #session {
+	line-height: 3rem;
+	width: 5rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+#login:hover, #register:hover, #session:hover {
+	color: #FFF;
 }
 
 #focus-container {
+    position: relative;
+    top: 25vmin;
+    width: 90vmin;
     display: flex;
     justify-content: space-between;
-    width: 80%;
-    max-width: 60em;
-    min-width: 45em;
 }
 
 .focus {
-	width: 15rem;
-	height: 15rem;
-	background-color: blue;
+	height: 25vmin;
+	width: 25vmin;
+    background-color: #006A4E;
+    display: flex;
+    flex-direction: column;
+	justify-content: center;
+    box-shadow: 2px 2px 5px #888;
 }
 
+.focus:hover {
+	color: #FFF;
+}
