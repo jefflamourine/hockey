@@ -29,7 +29,9 @@ html
 			for game in games
 				tr
 					td= game.date.toDateString()
-					td= game.blue.name
+					if game.blue
+						td= game.blue.name
 					td= game.blueScore
 					td= game.redScore
-					td= game.red.name
+					if game.red
+						td= game.red.name

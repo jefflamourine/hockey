@@ -132,143 +132,169 @@ var App = function() {
 	var Goal = mongoose.model('Goal', goalSchema);
 	var Game = mongoose.model('Game', gameSchema);
 
-	new Player({
+	var player1 = new Player({
 		name: "player1",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player2 = new Player({
 		name: "player2",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player3 = new Player({
 		name: "player3",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player4 = new Player({
 		name: "player4",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player5 = new Player({
 		name: "player5",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player6 = new Player({
 		name: "player6",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player7 = new Player({
 		name: "player7",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
-	new Player({
+	});
+	var player8 = new Player({
 		name: "player8",
 		active: true,
 		gamesPlayed: 0
-	}).save(function(err, player) {});
+	});
 
-	new Team({
+	var team1 = new Team({
 		name: "team1",
-		roster: [mongoose.Types.ObjectId("553fdd18bdabb04213601e88"),
-			mongoose.Types.ObjectId("553fdde857c10748138e5d5d")
-		]
-	}).save(function(err, team) {});
-	new Team({
+		roster: [player1._id, player2._id]
+	});
+	var team2 = new Team({
 		name: "team2",
-		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d62"),
-			mongoose.Types.ObjectId("553fdde857c10748138e5d5f")
-		]
-	}).save(function(err, team) {});
-	new Team({
+		roster: [player3._id, player4._id]
+	});
+	var team3 = new Team({
 		name: "team3",
-		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d60"),
-			mongoose.Types.ObjectId("553fdde857c10748138e5d61")
-		]
-	}).save(function(err, team) {});
-	new Team({
+		roster: [player5._id, player6._id]
+	});
+	var team4 = new Team({
 		name: "team4",
-		roster: [mongoose.Types.ObjectId("553fdde857c10748138e5d5e"),
-			mongoose.Types.ObjectId("553fdde857c10748138e5d63")
-		]
-	}).save(function(err, team) {});
+		roster: [player7._id, player8._id]
+	});
 
-	new Game({
+	var game1 = new Game({
 		date: new Date(),
-		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0b"),
+		blue: team1._id,
 		bluePlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdde857c10748138e5d62")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d5f")],
+			forwards: [player1._id],
+			defense: [player2._id],
 			goalies: []
 		},
 		blueScore: 2,
-		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0c"),
+		red: team2._id,
 		redPlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdde857c10748138e5d60")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d61")],
+			forwards: [player3._id],
+			defense: [player4._id],
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {});
+	});
 
-	new Game({
+	var game2 = new Game({
 		date: new Date(),
-		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0a"),
+		blue: team3._id,
 		bluePlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdd18bdabb04213601e88")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d5d")],
+			forwards: [player5._id],
+			defense: [player6._id],
 			goalies: []
 		},
 		blueScore: 2,
-		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0d"),
+		red: team4._id,
 		redPlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdde857c10748138e5d5e")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d63")],
+			forwards: [player7._id],
+			defense: [player8._id],
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {});
+	});
 
-	new Game({
+	var game3 = new Game({
 		date: new Date(),
-		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0b"),
+		blue: team1._id,
 		bluePlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdde857c10748138e5d62")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d5f")],
+			forwards: [player1._id],
+			defense: [player2._id],
 			goalies: []
 		},
 		blueScore: 2,
-		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0a"),
+		red: team3._id,
 		redPlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdd18bdabb04213601e88")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d5d")],
+			forwards: [player5._id],
+			defense: [player6._id],
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {});
+	});
 
-	new Game({
+	var game4 = new Game({
 		date: new Date(),
-		blue: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0c"),
+		blue: team2._id,
 		bluePlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdde857c10748138e5d60")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d61")],
+			forwards: [player3._id],
+			defense: [player4._id],
 			goalies: []
 		},
 		blueScore: 2,
-		red: mongoose.Types.ObjectId("553fe4fb4b81ac0214520f0d"),
+		red: team4._id,
 		redPlayedGames: {
-			forwards: [mongoose.Types.ObjectId("553fdde857c10748138e5d5e")],
-			defense: [mongoose.Types.ObjectId("553fdde857c10748138e5d63")],
+			forwards: [player7._id],
+			defense: [player8._id],
 			goalies: []
 		},
 		redScore: 1
-	}).save(function(err, game) {});
+	});
+
+	player1.save(function(err, player) {
+	player2.save(function(err, player) {
+	player3.save(function(err, player) {
+	player4.save(function(err, player) {
+	player5.save(function(err, player) {
+	player6.save(function(err, player) {
+	player7.save(function(err, player) {
+	player8.save(function(err, player) {
+	team1.save(function(err, game) {
+	team2.save(function(err, game) {
+	team3.save(function(err, game) {
+	team4.save(function(err, game) {
+	game1.save(function(err, game) {
+	game2.save(function(err, game) {
+	game3.save(function(err, game) {
+	game4.save(function(err, game) {
+
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
 
 	// End Mongoose Setup
 
@@ -381,10 +407,7 @@ var App = function() {
 		if (req.session && req.session.account) {
 			session = req.session.account.username;
 		}
-		var gamesKeepRefs = Game.find({}, function(err, games) {
-			console.log(games);
-		});
-		var games = Game.find({}).populate('blue').populate('red').exec(function(err, games) { 
+		var games = Game.find({}).populate('blue', 'name').populate('red', 'name').exec(function(err, games) {
 			console.log(games);
 			if (!games) games = [];
 			res.render('games', {
