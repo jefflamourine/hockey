@@ -132,6 +132,7 @@ var App = function() {
 	var Goal = mongoose.model('Goal', goalSchema);
 	var Game = mongoose.model('Game', gameSchema);
 
+	/* SAMPLE DATA TO INITIALIZE DB
 	var player1 = new Player({
 		name: "player1",
 		active: true,
@@ -295,6 +296,7 @@ var App = function() {
 			});
 		});
 	});
+	SAMPLE DATA END */
 
 	// End Mongoose Setup
 
