@@ -22,7 +22,6 @@
     "client-sessions": "^0.7.0",
     "express": ">= 3.4.4",
     "jade": "^1.9.2",
-    "mongodb": "^2.0.27",
     "mongoose": "^4.0.2",
     "mongoose-unique-validator": "^0.4.1",
     "password-hash": "^1.2.2",
