@@ -86,7 +86,7 @@ var App = function() {
 			type: Schema.Types.ObjectId,
 			ref: 'Game'
 		},
-		team: String
+		color: String
 	});
 
 	var gameSchema = new Schema({
@@ -380,27 +380,51 @@ var App = function() {
 
 	var team1 = new Team({
 		name: "Winnipeg Jets",
-		roster: [player1._id, player2._id, player3._id, player4._id, player5._id, player6._id, player7._id, player8._id]
+		roster: [player1._id, player2._id, player3._id, player4._id, player5._id, player6._id, player7._id, player8._id],
+		w: 0,
+		otw: 0,
+		otl: 0,
+		l: 0
 	});
 	var team2 = new Team({
 		name: "Philadelphia Flyers",
-		roster: [player9._id, player10._id, player11._id, player12._id, player13._id, player14._id, player15._id, player16._id]
+		roster: [player9._id, player10._id, player11._id, player12._id, player13._id, player14._id, player15._id, player16._id],
+		w: 0,
+		otw: 0,
+		otl: 0,
+		l: 0
 	});
 	var team3 = new Team({
 		name: "Atlanta Thrashers",
-		roster: [player17._id, player18._id, player19._id, player20._id, player21._id, player22._id, player23._id, player24._id]
+		roster: [player17._id, player18._id, player19._id, player20._id, player21._id, player22._id, player23._id, player24._id],
+		w: 0,
+		otw: 0,
+		otl: 0,
+		l: 0
 	});
 	var team4 = new Team({
 		name: "Dallas Stars",
-		roster: [player25._id, player26._id, player27._id, player28._id, player29._id, player30._id, player31._id, player32._id]
+		roster: [player25._id, player26._id, player27._id, player28._id, player29._id, player30._id, player31._id, player32._id],
+		w: 0,
+		otw: 0,
+		otl: 0,
+		l: 0
 	});
 	var team5 = new Team({
 		name: "Los Angeles Kings",
-		roster: [player33._id, player34._id, player35._id, player36._id, player37._id, player38._id, player39._id, player40._id]
+		roster: [player33._id, player34._id, player35._id, player36._id, player37._id, player38._id, player39._id, player40._id],
+		w: 0,
+		otw: 0,
+		otl: 0,
+		l: 0
 	});
 	var team6 = new Team({
 		name: "New Jersey Devils",
-		roster: [player41._id, player42._id, player43._id, player44._id, player45._id, player46._id, player47._id, player48._id]
+		roster: [player41._id, player42._id, player43._id, player44._id, player45._id, player46._id, player47._id, player48._id],
+		w: 0,
+		otw: 0,
+		otl: 0,
+		l: 0
 	});
 
 	player1.save(function(err, player) {
