@@ -25,8 +25,12 @@ html
 				td Name 
 				td Active
 				td Games Played
+				td Goals
+				td Assists
 			for player in players
 				tr
 					td= player.name
 					td= player.active
 					td= player.gamesPlayed
+					td= player.goals
+					td= player.assists
