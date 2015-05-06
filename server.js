@@ -81,7 +81,8 @@ var App = function() {
 		game: {
 			type: Schema.Types.ObjectId,
 			ref: 'Game'
-		}
+		},
+		team: String
 	});
 
 	var gameSchema = new Schema({
@@ -111,6 +112,9 @@ var App = function() {
 		},
 		redPlayedGames: {
 			forwards: [{
+
+
+
 				type: Schema.Types.ObjectId,
 				ref: 'Player'
 			}],
@@ -132,171 +136,344 @@ var App = function() {
 	var Goal = mongoose.model('Goal', goalSchema);
 	var Game = mongoose.model('Game', gameSchema);
 
-	/* SAMPLE DATA TO INITIALIZE DB
 	var player1 = new Player({
-		name: "player1",
+		name: "Burnwurnum",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player2 = new Player({
-		name: "player2",
+		name: "BigV",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player3 = new Player({
-		name: "player3",
+		name: "CrabInATree",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player4 = new Player({
-		name: "player4",
+		name: "Bojarzin",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player5 = new Player({
-		name: "player5",
+		name: "Nina",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player6 = new Player({
-		name: "player6",
+		name: "JLalu",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player7 = new Player({
-		name: "player7",
+		name: "DvD",
 		active: true,
 		gamesPlayed: 0
 	});
 	var player8 = new Player({
-		name: "player8",
+		name: "meatsale",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player9 = new Player({
+		name: "Zam",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player10 = new Player({
+		name: "Dyaloreax",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player11 = new Player({
+		name: "Hesse",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player12 = new Player({
+		name: "pkpaching",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player13 = new Player({
+		name: "Pet the Pizza",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player14 = new Player({
+		name: "Superhotglue",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player15 = new Player({
+		name: "Doucet",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player16 = new Player({
+		name: "STAEDTLERS",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player17 = new Player({
+		name: "Fuzzywuzzy",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player18 = new Player({
+		name: "TaZeR",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player19 = new Player({
+		name: "NotLead",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player20 = new Player({
+		name: "Proper Cheeze",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player21 = new Player({
+		name: "Jarvan",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player22 = new Player({
+		name: "Kuzy",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player23 = new Player({
+		name: "DrSlugger",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player24 = new Player({
+		name: "DrGherms",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player25 = new Player({
+		name: "Dalfan",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player26 = new Player({
+		name: "Teemu Salami",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player27 = new Player({
+		name: "Dick_Doug",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player28 = new Player({
+		name: "Ticklebox",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player29 = new Player({
+		name: "Dildozer",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player30 = new Player({
+		name: "MCJabba69",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player31 = new Player({
+		name: "5 lim",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player32 = new Player({
+		name: "Trevkro",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player33 = new Player({
+		name: "Gretzky",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player34 = new Player({
+		name: "KS Otto",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player35 = new Player({
+		name: "Sammy",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player36 = new Player({
+		name: "Goose",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player37 = new Player({
+		name: "Tluers",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player38 = new Player({
+		name: "Quoof",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player39 = new Player({
+		name: "Austin",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player40 = new Player({
+		name: "SelfPlug",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player41 = new Player({
+		name: "Gabe",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player42 = new Player({
+		name: "kBomb",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player43 = new Player({
+		name: "GoLeafsGo",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player44 = new Player({
+		name: "Kapanen",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player45 = new Player({
+		name: "Tallmidget",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player46 = new Player({
+		name: "Jake Allen",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player47 = new Player({
+		name: "NobodyEpic123",
+		active: true,
+		gamesPlayed: 0
+	});
+	var player48 = new Player({
+		name: "Johnny Hockey",
 		active: true,
 		gamesPlayed: 0
 	});
 
-	var team1 = new Team({
-		name: "team1",
-		roster: [player1._id, player2._id]
-	});
-	var team2 = new Team({
-		name: "team2",
-		roster: [player3._id, player4._id]
-	});
-	var team3 = new Team({
-		name: "team3",
-		roster: [player5._id, player6._id]
-	});
-	var team4 = new Team({
-		name: "team4",
-		roster: [player7._id, player8._id]
-	});
+	player1.save(function(err, player){
+	player2.save(function(err, player){
+	player3.save(function(err, player){
+	player4.save(function(err, player){
+	player5.save(function(err, player){
+	player6.save(function(err, player){
+	player7.save(function(err, player){
+	player8.save(function(err, player){
+	player9.save(function(err, player){
+	player10.save(function(err, player){
+	player11.save(function(err, player){
+	player12.save(function(err, player){
+	player13.save(function(err, player){
+	player14.save(function(err, player){
+	player15.save(function(err, player){
+	player16.save(function(err, player){
+	player17.save(function(err, player){
+	player18.save(function(err, player){
+	player19.save(function(err, player){
+	player20.save(function(err, player){
+	player21.save(function(err, player){
+	player22.save(function(err, player){
+	player23.save(function(err, player){
+	player24.save(function(err, player){
+	player25.save(function(err, player){
+	player26.save(function(err, player){
+	player27.save(function(err, player){
+	player28.save(function(err, player){
+	player29.save(function(err, player){
+	player30.save(function(err, player){
+	player31.save(function(err, player){
+	player32.save(function(err, player){
+	player33.save(function(err, player){
+	player34.save(function(err, player){
+	player35.save(function(err, player){
+	player36.save(function(err, player){
+	player37.save(function(err, player){
+	player38.save(function(err, player){
+	player39.save(function(err, player){
+	player40.save(function(err, player){
+	player41.save(function(err, player){
+	player42.save(function(err, player){
+	player43.save(function(err, player){
+	player44.save(function(err, player){
+	player45.save(function(err, player){
+	player46.save(function(err, player){
+	player47.save(function(err, player){
+	player48.save(function(err, player){
 
-	var game1 = new Game({
-		date: new Date(),
-		blue: team1._id,
-		bluePlayedGames: {
-			forwards: [player1._id],
-			defense: [player2._id],
-			goalies: []
-		},
-		blueScore: 2,
-		red: team2._id,
-		redPlayedGames: {
-			forwards: [player3._id],
-			defense: [player4._id],
-			goalies: []
-		},
-		redScore: 1
 	});
-
-	var game2 = new Game({
-		date: new Date(),
-		blue: team3._id,
-		bluePlayedGames: {
-			forwards: [player5._id],
-			defense: [player6._id],
-			goalies: []
-		},
-		blueScore: 2,
-		red: team4._id,
-		redPlayedGames: {
-			forwards: [player7._id],
-			defense: [player8._id],
-			goalies: []
-		},
-		redScore: 1
 	});
-
-	var game3 = new Game({
-		date: new Date(),
-		blue: team1._id,
-		bluePlayedGames: {
-			forwards: [player1._id],
-			defense: [player2._id],
-			goalies: []
-		},
-		blueScore: 2,
-		red: team3._id,
-		redPlayedGames: {
-			forwards: [player5._id],
-			defense: [player6._id],
-			goalies: []
-		},
-		redScore: 1
 	});
-
-	var game4 = new Game({
-		date: new Date(),
-		blue: team2._id,
-		bluePlayedGames: {
-			forwards: [player3._id],
-			defense: [player4._id],
-			goalies: []
-		},
-		blueScore: 2,
-		red: team4._id,
-		redPlayedGames: {
-			forwards: [player7._id],
-			defense: [player8._id],
-			goalies: []
-		},
-		redScore: 1
 	});
-
-	player1.save(function(err, player) {
-		player2.save(function(err, player) {
-			player3.save(function(err, player) {
-				player4.save(function(err, player) {
-					player5.save(function(err, player) {
-						player6.save(function(err, player) {
-							player7.save(function(err, player) {
-								player8.save(function(err, player) {
-									team1.save(function(err, game) {
-										team2.save(function(err, game) {
-											team3.save(function(err, game) {
-												team4.save(function(err, game) {
-													game1.save(function(err, game) {
-														game2.save(function(err, game) {
-															game3.save(function(err, game) {
-																game4.save(function(err, game) {
-
-																});
-															});
-														});
-													});
-												});
-											});
-										});
-									});
-								});
-							});
-						});
-					});
-				});
-			});
-		});
 	});
-	SAMPLE DATA END */
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
+	});
 
 	// End Mongoose Setup
 
