@@ -112,9 +112,6 @@ var App = function() {
 		},
 		redPlayedGames: {
 			forwards: [{
-
-
-
 				type: Schema.Types.ObjectId,
 				ref: 'Player'
 			}],
@@ -378,138 +375,138 @@ var App = function() {
 	});
 
 	var team1 = new Team({
-	name: "Winnipeg Jets",
-	roster: [player1._id, player2._id, player3._id, player4._id, player5._id, player6._id, player7._id, player8._id]
-});
-var team2 = new Team({
-	name: "Philadelphia Flyers",
-	roster: [player9._id, player10._id, player11._id, player12._id, player13._id, player14._id, player15._id, player16._id]
-});
-var team3 = new Team({
-	name: "Atlanta Thrashers",
-	roster: [player17._id, player18._id, player19._id, player20._id, player21._id, player22._id, player23._id, player24._id]
-});
-var team4 = new Team({
-	name: "Dallas Stars",
-	roster: [player25._id, player26._id, player27._id, player28._id, player29._id, player30._id, player31._id, player32._id]
-});
-var team5 = new Team({
-	name: "Los Angeles Kings",
-	roster: [player33._id, player34._id, player35._id, player36._id, player37._id, player38._id, player39._id, player40._id]
-});
-var team6 = new Team({
-	name: "New Jersey Devils",
-	roster: [player41._id, player42._id, player43._id, player44._id, player45._id, player46._id, player47._id, player48._id]
-});
+		name: "Winnipeg Jets",
+		roster: [player1._id, player2._id, player3._id, player4._id, player5._id, player6._id, player7._id, player8._id]
+	});
+	var team2 = new Team({
+		name: "Philadelphia Flyers",
+		roster: [player9._id, player10._id, player11._id, player12._id, player13._id, player14._id, player15._id, player16._id]
+	});
+	var team3 = new Team({
+		name: "Atlanta Thrashers",
+		roster: [player17._id, player18._id, player19._id, player20._id, player21._id, player22._id, player23._id, player24._id]
+	});
+	var team4 = new Team({
+		name: "Dallas Stars",
+		roster: [player25._id, player26._id, player27._id, player28._id, player29._id, player30._id, player31._id, player32._id]
+	});
+	var team5 = new Team({
+		name: "Los Angeles Kings",
+		roster: [player33._id, player34._id, player35._id, player36._id, player37._id, player38._id, player39._id, player40._id]
+	});
+	var team6 = new Team({
+		name: "New Jersey Devils",
+		roster: [player41._id, player42._id, player43._id, player44._id, player45._id, player46._id, player47._id, player48._id]
+	});
 
-	player1.save(function(err, player){
-	player2.save(function(err, player){
-	player3.save(function(err, player){
-	player4.save(function(err, player){
-	player5.save(function(err, player){
-	player6.save(function(err, player){
-	player7.save(function(err, player){
-	player8.save(function(err, player){
-	player9.save(function(err, player){
-	player10.save(function(err, player){
-	player11.save(function(err, player){
-	player12.save(function(err, player){
-	player13.save(function(err, player){
-	player14.save(function(err, player){
-	player15.save(function(err, player){
-	player16.save(function(err, player){
-	player17.save(function(err, player){
-	player18.save(function(err, player){
-	player19.save(function(err, player){
-	player20.save(function(err, player){
-	player21.save(function(err, player){
-	player22.save(function(err, player){
-	player23.save(function(err, player){
-	player24.save(function(err, player){
-	player25.save(function(err, player){
-	player26.save(function(err, player){
-	player27.save(function(err, player){
-	player28.save(function(err, player){
-	player29.save(function(err, player){
-	player30.save(function(err, player){
-	player31.save(function(err, player){
-	player32.save(function(err, player){
-	player33.save(function(err, player){
-	player34.save(function(err, player){
-	player35.save(function(err, player){
-	player36.save(function(err, player){
-	player37.save(function(err, player){
-	player38.save(function(err, player){
-	player39.save(function(err, player){
-	player40.save(function(err, player){
-	player41.save(function(err, player){
-	player42.save(function(err, player){
-	player43.save(function(err, player){
-	player44.save(function(err, player){
-	player45.save(function(err, player){
-	player46.save(function(err, player){
-	player47.save(function(err, player){
-	player48.save(function(err, player){
-	team1.save(function(err, team){
-	team2.save(function(err, team){
-	team3.save(function(err, team){
-	team4.save(function(err, team){
-	team5.save(function(err, team){
-	team6.save(function(err, team){
+	player1.save(function(err, player) {
+		player2.save(function(err, player) {
+			player3.save(function(err, player) {
+				player4.save(function(err, player) {
+					player5.save(function(err, player) {
+						player6.save(function(err, player) {
+							player7.save(function(err, player) {
+								player8.save(function(err, player) {
+									player9.save(function(err, player) {
+										player10.save(function(err, player) {
+											player11.save(function(err, player) {
+												player12.save(function(err, player) {
+													player13.save(function(err, player) {
+														player14.save(function(err, player) {
+															player15.save(function(err, player) {
+																player16.save(function(err, player) {
+																	player17.save(function(err, player) {
+																		player18.save(function(err, player) {
+																			player19.save(function(err, player) {
+																				player20.save(function(err, player) {
+																					player21.save(function(err, player) {
+																						player22.save(function(err, player) {
+																							player23.save(function(err, player) {
+																								player24.save(function(err, player) {
+																									player25.save(function(err, player) {
+																										player26.save(function(err, player) {
+																											player27.save(function(err, player) {
+																												player28.save(function(err, player) {
+																													player29.save(function(err, player) {
+																														player30.save(function(err, player) {
+																															player31.save(function(err, player) {
+																																player32.save(function(err, player) {
+																																	player33.save(function(err, player) {
+																																		player34.save(function(err, player) {
+																																			player35.save(function(err, player) {
+																																				player36.save(function(err, player) {
+																																					player37.save(function(err, player) {
+																																						player38.save(function(err, player) {
+																																							player39.save(function(err, player) {
+																																								player40.save(function(err, player) {
+																																									player41.save(function(err, player) {
+																																										player42.save(function(err, player) {
+																																											player43.save(function(err, player) {
+																																												player44.save(function(err, player) {
+																																													player45.save(function(err, player) {
+																																														player46.save(function(err, player) {
+																																															player47.save(function(err, player) {
+																																																player48.save(function(err, player) {
+																																																	team1.save(function(err, team) {
+																																																		team2.save(function(err, team) {
+																																																			team3.save(function(err, team) {
+																																																				team4.save(function(err, team) {
+																																																					team5.save(function(err, team) {
+																																																						team6.save(function(err, team) {
 
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
-	});
+																																																						});
+																																																					});
+																																																				});
+																																																			});
+																																																		});
+																																																	});
+																																																});
+																																															});
+																																														});
+																																													});
+																																												});
+																																											});
+																																										});
+																																									});
+																																								});
+																																							});
+																																						});
+																																					});
+																																				});
+																																			});
+																																		});
+																																	});
+																																});
+																															});
+																														});
+																													});
+																												});
+																											});
+																										});
+																									});
+																								});
+																							});
+																						});
+																					});
+																				});
+																			});
+																		});
+																	});
+																});
+															});
+														});
+													});
+												});
+											});
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+		});
 	});
 
 	// End Mongoose Setup
