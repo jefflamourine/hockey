@@ -432,7 +432,7 @@ var App = function() {
 	teams = [WPG, PHI, ATL, DAL, LAK, NJD];
 
 	game1 = new Game({
-		date: new Date(5 / 17 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 17, 19, 30),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -449,7 +449,7 @@ var App = function() {
 		redScore: -1
 	});
 	game2 = new Game({
-		date: new Date(5 / 17 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 17, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -466,7 +466,7 @@ var App = function() {
 		redScore: -1
 	});
 	game3 = new Game({
-		date: new Date(5 / 17 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 17, 20, 10),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -483,7 +483,7 @@ var App = function() {
 		redScore: -1
 	});
 	game4 = new Game({
-		date: new Date(5 / 19 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 19, 19, 30),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -500,7 +500,7 @@ var App = function() {
 		redScore: -1
 	});
 	game5 = new Game({
-		date: new Date(5 / 19 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 19, 19, 50),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -517,7 +517,7 @@ var App = function() {
 		redScore: -1
 	});
 	game6 = new Game({
-		date: new Date(5 / 19 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 19, 20, 10),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -534,7 +534,7 @@ var App = function() {
 		redScore: -1
 	});
 	game7 = new Game({
-		date: new Date(5 / 21 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 21, 19, 30),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -551,7 +551,7 @@ var App = function() {
 		redScore: -1
 	});
 	game8 = new Game({
-		date: new Date(5 / 21 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 21, 19, 50),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -568,7 +568,7 @@ var App = function() {
 		redScore: -1
 	});
 	game9 = new Game({
-		date: new Date(5 / 21 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 21, 20, 10),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -585,7 +585,7 @@ var App = function() {
 		redScore: -1
 	});
 	game10 = new Game({
-		date: new Date(5 / 24 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 24, 19, 30),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -602,7 +602,7 @@ var App = function() {
 		redScore: -1
 	});
 	game11 = new Game({
-		date: new Date(5 / 24 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 24, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -619,7 +619,7 @@ var App = function() {
 		redScore: -1
 	});
 	game12 = new Game({
-		date: new Date(5 / 24 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 24, 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -636,7 +636,7 @@ var App = function() {
 		redScore: -1
 	});
 	game13 = new Game({
-		date: new Date(5 / 26 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 26, 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -653,7 +653,7 @@ var App = function() {
 		redScore: -1
 	});
 	game14 = new Game({
-		date: new Date(5 / 26 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 26, 19, 50),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -670,7 +670,7 @@ var App = function() {
 		redScore: -1
 	});
 	game15 = new Game({
-		date: new Date(5 / 26 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 26, 20, 10),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -687,7 +687,7 @@ var App = function() {
 		redScore: -1
 	});
 	game16 = new Game({
-		date: new Date(5 / 28 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 28, 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -704,7 +704,7 @@ var App = function() {
 		redScore: -1
 	});
 	game17 = new Game({
-		date: new Date(5 / 28 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 28, 19, 50),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -721,7 +721,7 @@ var App = function() {
 		redScore: -1
 	});
 	game18 = new Game({
-		date: new Date(5 / 28 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 28, 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -738,7 +738,7 @@ var App = function() {
 		redScore: -1
 	});
 	game19 = new Game({
-		date: new Date(5 / 31 / 2015, 7: 30 PM),
+		date: new Date(2015, 5, 31, 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -755,7 +755,7 @@ var App = function() {
 		redScore: -1
 	});
 	game20 = new Game({
-		date: new Date(5 / 31 / 2015, 7: 50 PM),
+		date: new Date(2015, 5, 31, 19, 50),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -772,7 +772,7 @@ var App = function() {
 		redScore: -1
 	});
 	game21 = new Game({
-		date: new Date(5 / 31 / 2015, 8: 10 PM),
+		date: new Date(2015, 5, 31, 20, 10),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -789,7 +789,7 @@ var App = function() {
 		redScore: -1
 	});
 	game22 = new Game({
-		date: new Date(6 / 2 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 2 , 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -806,7 +806,7 @@ var App = function() {
 		redScore: -1
 	});
 	game23 = new Game({
-		date: new Date(6 / 2 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 2 , 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -823,7 +823,7 @@ var App = function() {
 		redScore: -1
 	});
 	game24 = new Game({
-		date: new Date(6 / 2 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 2 , 20, 10),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -840,7 +840,7 @@ var App = function() {
 		redScore: -1
 	});
 	game25 = new Game({
-		date: new Date(6 / 4 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 4 , 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -857,7 +857,7 @@ var App = function() {
 		redScore: -1
 	});
 	game26 = new Game({
-		date: new Date(6 / 4 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 4 , 19, 50),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -874,7 +874,7 @@ var App = function() {
 		redScore: -1
 	});
 	game27 = new Game({
-		date: new Date(6 / 4 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 4 , 20, 10),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -891,7 +891,7 @@ var App = function() {
 		redScore: -1
 	});
 	game28 = new Game({
-		date: new Date(6 / 7 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 7 , 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -908,7 +908,7 @@ var App = function() {
 		redScore: -1
 	});
 	game29 = new Game({
-		date: new Date(6 / 7 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 7 , 19, 50),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -925,7 +925,7 @@ var App = function() {
 		redScore: -1
 	});
 	game30 = new Game({
-		date: new Date(6 / 7 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 7 , 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -942,7 +942,7 @@ var App = function() {
 		redScore: -1
 	});
 	game31 = new Game({
-		date: new Date(6 / 9 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 9 , 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -959,7 +959,7 @@ var App = function() {
 		redScore: -1
 	});
 	game32 = new Game({
-		date: new Date(6 / 9 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 9 , 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -976,7 +976,7 @@ var App = function() {
 		redScore: -1
 	});
 	game33 = new Game({
-		date: new Date(6 / 9 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 9 , 20, 10),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -993,7 +993,7 @@ var App = function() {
 		redScore: -1
 	});
 	game34 = new Game({
-		date: new Date(6 / 11 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 11, 19, 30),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1010,7 +1010,7 @@ var App = function() {
 		redScore: -1
 	});
 	game35 = new Game({
-		date: new Date(6 / 11 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 11, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1027,7 +1027,7 @@ var App = function() {
 		redScore: -1
 	});
 	game36 = new Game({
-		date: new Date(6 / 11 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 11, 20, 10),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1044,7 +1044,7 @@ var App = function() {
 		redScore: -1
 	});
 	game37 = new Game({
-		date: new Date(6 / 14 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 14, 19, 30),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1061,7 +1061,7 @@ var App = function() {
 		redScore: -1
 	});
 	game38 = new Game({
-		date: new Date(6 / 14 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 14, 19, 50),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1078,7 +1078,7 @@ var App = function() {
 		redScore: -1
 	});
 	game39 = new Game({
-		date: new Date(6 / 14 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 14, 20, 10),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1095,7 +1095,7 @@ var App = function() {
 		redScore: -1
 	});
 	game40 = new Game({
-		date: new Date(6 / 16 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 16, 19, 30),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1112,7 +1112,7 @@ var App = function() {
 		redScore: -1
 	});
 	game41 = new Game({
-		date: new Date(6 / 16 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 16, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1129,7 +1129,7 @@ var App = function() {
 		redScore: -1
 	});
 	game42 = new Game({
-		date: new Date(6 / 16 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 16, 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1146,7 +1146,7 @@ var App = function() {
 		redScore: -1
 	});
 	game43 = new Game({
-		date: new Date(6 / 18 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 18, 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1163,7 +1163,7 @@ var App = function() {
 		redScore: -1
 	});
 	game44 = new Game({
-		date: new Date(6 / 18 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 18, 19, 50),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1180,7 +1180,7 @@ var App = function() {
 		redScore: -1
 	});
 	game45 = new Game({
-		date: new Date(6 / 18 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 18, 20, 10),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1197,7 +1197,7 @@ var App = function() {
 		redScore: -1
 	});
 	game46 = new Game({
-		date: new Date(6 / 21 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 21, 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1214,7 +1214,7 @@ var App = function() {
 		redScore: -1
 	});
 	game47 = new Game({
-		date: new Date(6 / 21 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 21, 19, 50),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1231,7 +1231,7 @@ var App = function() {
 		redScore: -1
 	});
 	game48 = new Game({
-		date: new Date(6 / 21 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 21, 20, 10),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1248,7 +1248,7 @@ var App = function() {
 		redScore: -1
 	});
 	game49 = new Game({
-		date: new Date(6 / 23 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 23, 19, 30),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1265,7 +1265,7 @@ var App = function() {
 		redScore: -1
 	});
 	game50 = new Game({
-		date: new Date(6 / 23 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 23, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1282,7 +1282,7 @@ var App = function() {
 		redScore: -1
 	});
 	game51 = new Game({
-		date: new Date(6 / 23 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 23, 20, 10),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1299,7 +1299,7 @@ var App = function() {
 		redScore: -1
 	});
 	game52 = new Game({
-		date: new Date(6 / 25 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 25, 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1316,7 +1316,7 @@ var App = function() {
 		redScore: -1
 	});
 	game53 = new Game({
-		date: new Date(6 / 25 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 25, 19, 50),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1333,7 +1333,7 @@ var App = function() {
 		redScore: -1
 	});
 	game54 = new Game({
-		date: new Date(6 / 25 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 25, 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1350,7 +1350,7 @@ var App = function() {
 		redScore: -1
 	});
 	game55 = new Game({
-		date: new Date(6 / 28 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 28, 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1367,7 +1367,7 @@ var App = function() {
 		redScore: -1
 	});
 	game56 = new Game({
-		date: new Date(6 / 28 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 28, 19, 50),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1384,7 +1384,7 @@ var App = function() {
 		redScore: -1
 	});
 	game57 = new Game({
-		date: new Date(6 / 28 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 28, 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1401,7 +1401,7 @@ var App = function() {
 		redScore: -1
 	});
 	game58 = new Game({
-		date: new Date(6 / 30 / 2015, 7: 30 PM),
+		date: new Date(2015, 6, 30, 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1418,7 +1418,7 @@ var App = function() {
 		redScore: -1
 	});
 	game59 = new Game({
-		date: new Date(6 / 30 / 2015, 7: 50 PM),
+		date: new Date(2015, 6, 30, 19, 50),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1435,7 +1435,7 @@ var App = function() {
 		redScore: -1
 	});
 	game60 = new Game({
-		date: new Date(6 / 30 / 2015, 8: 10 PM),
+		date: new Date(2015, 6, 30, 20, 10),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1456,7 +1456,7 @@ var App = function() {
 
 	function savePlayers(start, total) {
 		players[start - 1].save(function(err, player) {
-			if (start + 1 < total) {
+			if (start < total) {
 				savePlayers(start + 1, total);
 			} else {
 				saveTeams(1, 6);
@@ -1466,7 +1466,7 @@ var App = function() {
 
 	function saveTeams(start, total) {
 		teams[start - 1].save(function(err, team) {
-			if (start + 1 < total) {
+			if (start < total) {
 				saveTeams(start + 1, total);
 			} else {
 				saveGames(1, 60);
@@ -1476,7 +1476,7 @@ var App = function() {
 
 	function saveGames(start, total) {
 		games[start - 1].save(function(err, games) {
-			if (start + 1 < total) {
+			if (start < total) {
 				saveGames(start + 1, total);
 			}
 		})
@@ -1596,7 +1596,6 @@ var App = function() {
 			session = req.session.account.username;
 		}
 		var games = Game.find({}).populate('blue', 'name').populate('red', 'name').exec(function(err, games) {
-			console.log(games);
 			if (!games) games = [];
 			res.render('games', {
 				title: "Games",
