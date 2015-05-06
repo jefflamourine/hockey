@@ -64,7 +64,11 @@ var App = function() {
 		roster: [{
 			type: Schema.Types.ObjectId,
 			ref: 'Player'
-		}]
+		}],
+		w: Number,
+		otw: Number,
+		otl: Number,
+		l: Number
 	});
 
 	teamSchema.plugin(uniqueValidator);
@@ -679,37 +683,9 @@ var App = function() {
 		});
 	};
 
-	// Goal submission form
-	self.routes['submit-goals'] = function(req, res) {
-		var session;
-		if (req.session && req.session.account) {
-			session = req.session.account.username;
-		}
-		Player.find({
-			active: true
-		}, function(err, players) {
-			if (!players) players = [];
-			res.render('submit-goals', {
-				title: 'Submit Goals',
-				session: session,
-				players: players
-			});
-		});
-	};
-
-	// Goal submit
+	// Goal submit (via stats extractor)
 	self.routes['try-submit-goals'] = function(req, res) {
-		var scorer = req.body.data.scorer;
-		var assister = req.body.data.assister;
-		var game = req.body.data.game;
-
-		Player.findOne({
-			username: scorer
-		}, function(err, scorerDoc) {
-			Player.findOne({
-				username: assister
-			}, function(err, assisterDoc) {});
-		});
+		res.send(".");
 	};
 
 	// Create app
@@ -744,11 +720,10 @@ var App = function() {
 	self.app.get('/register', self.routes['register']);
 	self.app.post('/try-register', self.routes['try-register']);
 	self.app.get('/login', self.routes['login']);
-	self.app.get('/dashboard', self.routes['dashboard']);
 	self.app.post('/try-login', self.routes['try-login']);
+	self.app.get('/dashboard', self.routes['dashboard']);
 	self.app.get('/try-logout', self.routes['try-logout']);
-	self.app.get('/submit-goals', self.routes['submit-goals']);
-	self.app.post('/try-submit-goals', self.routes['try-submit-goals']);
+	self.app.get('/try-submit-goals', self.routes['try-submit-goals']);
 	self.app.get('/goals', self.routes['goals']);
 	self.app.get('/players', self.routes['players']);
 	self.app.get('/teams', self.routes['teams']);
