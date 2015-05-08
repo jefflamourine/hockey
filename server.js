@@ -63,6 +63,10 @@ var App = function() {
 			type: String,
 			unique: true
 		},
+		abbr: {
+			type: String,
+			unique: true
+		},
 		roster: [{
 			type: Schema.Types.ObjectId,
 			ref: 'Player'
@@ -88,7 +92,11 @@ var App = function() {
 			type: Schema.Types.ObjectId,
 			ref: 'Game'
 		},
-		color: String
+		team: {
+			type: Schema.Types.ObjectId,
+			ref: 'Team'
+		},
+		period: Number
 	});
 
 	var gameSchema = new Schema({
@@ -480,6 +488,7 @@ var App = function() {
 
 	var WPG = new Team({
 		name: "Winnipeg Jets",
+		abbr: "WPG",
 		roster: [player1._id, player2._id, player3._id, player4._id, player5._id, player6._id, player7._id, player8._id],
 		w: 0,
 		otw: 0,
@@ -488,6 +497,7 @@ var App = function() {
 	});
 	var PHI = new Team({
 		name: "Philadelphia Flyers",
+		abbr: "PHI",
 		roster: [player9._id, player10._id, player11._id, player12._id, player13._id, player14._id, player15._id, player16._id],
 		w: 0,
 		otw: 0,
@@ -496,6 +506,7 @@ var App = function() {
 	});
 	var ATL = new Team({
 		name: "Atlanta Thrashers",
+		abbr: "ATL",
 		roster: [player17._id, player18._id, player19._id, player20._id, player21._id, player22._id, player23._id, player24._id],
 		w: 0,
 		otw: 0,
@@ -504,6 +515,7 @@ var App = function() {
 	});
 	var DAL = new Team({
 		name: "Dallas Stars",
+		abbr: "DAL",
 		roster: [player25._id, player26._id, player27._id, player28._id, player29._id, player30._id, player31._id, player32._id],
 		w: 0,
 		otw: 0,
@@ -512,6 +524,7 @@ var App = function() {
 	});
 	var LAK = new Team({
 		name: "Los Angeles Kings",
+		abbr: "LAK",
 		roster: [player33._id, player34._id, player35._id, player36._id, player37._id, player38._id, player39._id, player40._id],
 		w: 0,
 		otw: 0,
@@ -520,6 +533,7 @@ var App = function() {
 	});
 	var NJD = new Team({
 		name: "New Jersey Devils",
+		abbr: "NJD",
 		roster: [player41._id, player42._id, player43._id, player44._id, player45._id, player46._id, player47._id, player48._id],
 		w: 0,
 		otw: 0,
@@ -887,7 +901,7 @@ var App = function() {
 		redScore: -1
 	});
 	game22 = new Game({
-		date: new Date(2015, 5, 2 , 19, 30),
+		date: new Date(2015, 5, 2, 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -904,7 +918,7 @@ var App = function() {
 		redScore: -1
 	});
 	game23 = new Game({
-		date: new Date(2015, 5, 2 , 19, 50),
+		date: new Date(2015, 5, 2, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -921,7 +935,7 @@ var App = function() {
 		redScore: -1
 	});
 	game24 = new Game({
-		date: new Date(2015, 5, 2 , 20, 10),
+		date: new Date(2015, 5, 2, 20, 10),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -938,7 +952,7 @@ var App = function() {
 		redScore: -1
 	});
 	game25 = new Game({
-		date: new Date(2015, 5, 4 , 19, 30),
+		date: new Date(2015, 5, 4, 19, 30),
 		blue: WPG._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -955,7 +969,7 @@ var App = function() {
 		redScore: -1
 	});
 	game26 = new Game({
-		date: new Date(2015, 5, 4 , 19, 50),
+		date: new Date(2015, 5, 4, 19, 50),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -972,7 +986,7 @@ var App = function() {
 		redScore: -1
 	});
 	game27 = new Game({
-		date: new Date(2015, 5, 4 , 20, 10),
+		date: new Date(2015, 5, 4, 20, 10),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -989,7 +1003,7 @@ var App = function() {
 		redScore: -1
 	});
 	game28 = new Game({
-		date: new Date(2015, 5, 7 , 19, 30),
+		date: new Date(2015, 5, 7, 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1006,7 +1020,7 @@ var App = function() {
 		redScore: -1
 	});
 	game29 = new Game({
-		date: new Date(2015, 5, 7 , 19, 50),
+		date: new Date(2015, 5, 7, 19, 50),
 		blue: DAL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1023,7 +1037,7 @@ var App = function() {
 		redScore: -1
 	});
 	game30 = new Game({
-		date: new Date(2015, 5, 7 , 20, 10),
+		date: new Date(2015, 5, 7, 20, 10),
 		blue: LAK._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1040,7 +1054,7 @@ var App = function() {
 		redScore: -1
 	});
 	game31 = new Game({
-		date: new Date(2015, 5, 9 , 19, 30),
+		date: new Date(2015, 5, 9, 19, 30),
 		blue: ATL._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1057,7 +1071,7 @@ var App = function() {
 		redScore: -1
 	});
 	game32 = new Game({
-		date: new Date(2015, 5, 9 , 19, 50),
+		date: new Date(2015, 5, 9, 19, 50),
 		blue: PHI._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1074,7 +1088,7 @@ var App = function() {
 		redScore: -1
 	});
 	game33 = new Game({
-		date: new Date(2015, 5, 9 , 20, 10),
+		date: new Date(2015, 5, 9, 20, 10),
 		blue: NJD._id,
 		bluePlayedGames: {
 			forwards: [],
@@ -1752,25 +1766,97 @@ var App = function() {
 	};
 
 	// Goal submit (via stats extractor)
+	// Example POST body: {"red": "ATL", "blue":"LAK", "date":"date", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
+	// I should use promises... promises are hard.
 	self.routes['try-submit-goals'] = function(req, res) {
-		var scorerName = req.body.goals[0].scorer;
-		var assisterName = req.body.goals[0].assister;
-		var goal = {};
-		Player.findOne({name: scorerName}, function(err, scorer) {
-			scorer.goals += 1;
-			goal.scorer = scorer._id;
-			scorer.save(function(err) {
-				Player.findOne({name: assisterName}, function(err, assister) {
-					assister.assists += 1;
-					goal.assister = assister._id;
-					assister.save(function(err) {
-						goal.team = PHI._id;
-						goal.color = "blue";
-						goalDoc = new Goal(goal);
-						goalDoc.save(function(err) {
-							res.send("Success!");
+		// Grab data from body
+		var redTeamAbbr = req.body.red;
+		var blueTeamAbbr = req.body.blue;
+		console.log(redTeamAbbr);
+		console.log(blueTeamAbbr);
+		var date = req.body.date;
+		var goals = req.body.goals;
+		var totalGoals = goals.length;
+		var redGoalCount = 0;
+		var blueGoalCount = 0;
+		// Query for red team
+		Team.findOne({
+			abbr: redTeamAbbr
+		}, function(err, redTeam) {
+			console.log(redTeam);
+			// Then get blue team
+			Team.findOne({
+				abbr: blueTeamAbbr
+			}, function(err, blueTeam) {
+				console.log(blueTeam);
+				// Query for the game
+				Game.findOne({
+					date: "Sun May 17 2015 19:30:00",
+					red: redTeam._id,
+					blue: blueTeam._id
+				}, function(err, game) {
+					console.log(game);
+					// For each goal
+					goals.forEach(function(extractedGoal) {
+						// Our new goal object
+						var goal = {};
+						var scorerName = extractedGoal.scorer;
+						var assisterName = extractedGoal.assister;
+						var period = extractedGoal.period;
+						var teamFor;
+						// Set teamFor to team who scored
+						if (extractedGoal.team == "red") {
+							teamFor = redTeam;
+							redGoalCount += 1;
+						} else {
+							teamFor = blueTeam;
+							blueGoalCount += 1;
+						}
+						console.log(teamFor.name);
+						// Find the scorer
+						Player.findOne({
+							name: scorerName
+						}, function(err, scorer) {
+							console.log(scorer);
+							// Give them a goal and add to the new goal object, save
+							scorer.goals += 1;
+							goal.scorer = scorer._id;
+							scorer.save(function(err) {
+								// Find the assister
+								Player.findOne({
+									name: assisterName
+								}, function(err, assister) {
+									console.log(assister);
+									// Give them an assist and add to the new goal object, save
+									assister.assists += 1;
+									goal.assister = assister._id;
+									assister.save(function(err) {
+										// Set up the rest of the goal doc and save
+										goal.team = teamFor._id;
+										goal.game = game._id;
+										goal.period = period;
+										console.log(goal);
+										goalDoc = new Goal(goal);
+										goalDoc.save(function(err) {
+											console.log(redGoalCount);
+											console.log(blueGoalCount);
+											console.log(totalGoals);
+											// If the number of goals that have been submitted equals
+											// the total number of goals in the request, save the game and respond.
+											if (redGoalCount + blueGoalCount == totalGoals) {
+												console.log("All goals done");
+												game.redScore = redGoalCount;
+												game.blueScore = blueGoalCount;
+												game.save(function(err) {
+													res.send("Success");
+												});
+											}
+										});
+									});
+								});
+							});
 						});
-					})
+					});
 				});
 			});
 		});
