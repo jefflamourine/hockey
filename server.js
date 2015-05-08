@@ -1766,7 +1766,7 @@ var App = function() {
 	};
 
 	// Goal submit (via stats extractor)
-	// Example POST body: {"red": "ATL", "blue":"LAK", "date":"date", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
+	// Example POST body: {"red": "ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
 	// I should use promises... promises are hard.
 	self.routes['try-submit-goals'] = function(req, res) {
 		// Grab data from body
@@ -1791,7 +1791,7 @@ var App = function() {
 				console.log(blueTeam);
 				// Query for the game
 				Game.findOne({
-					date: "Sun May 17 2015 19:30:00",
+					date: date,
 					red: redTeam._id,
 					blue: blueTeam._id
 				}, function(err, game) {
