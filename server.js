@@ -147,6 +147,13 @@ var App = function() {
 	var Goal = mongoose.model('Goal', goalSchema);
 	var Game = mongoose.model('Game', gameSchema);
 
+	var blankPlayer = new Player({
+		name: "",
+		active: false,
+		gamesPlayed: -1,
+		goals: -1,
+		assists: -1
+	});
 	var player1 = new Player({
 		name: "Burnwurnum",
 		active: true,
