@@ -1776,11 +1776,10 @@ var App = function() {
 	// Example POST body: {"red": "ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
 	// I should use promises... promises are hard.
 	self.routes['try-submit-goals'] = function(req, res) {
+		console.log(req.body);
 		// Grab data from body
 		var redTeamAbbr = req.body.red;
 		var blueTeamAbbr = req.body.blue;
-		console.log(redTeamAbbr);
-		console.log(blueTeamAbbr);
 		var date = req.body.date;
 		var goals = req.body.goals;
 		var totalGoals = goals.length;
@@ -1790,19 +1789,25 @@ var App = function() {
 		Team.findOne({
 			abbr: redTeamAbbr
 		}, function(err, redTeam) {
-			console.log(redTeam);
+			if (err) {
+				res.send(err);
+			}
 			// Then get blue team
 			Team.findOne({
 				abbr: blueTeamAbbr
 			}, function(err, blueTeam) {
-				console.log(blueTeam);
+				if (err) {
+					res.send(err);
+				}
 				// Query for the game
 				Game.findOne({
 					date: date,
 					red: redTeam._id,
 					blue: blueTeam._id
 				}, function(err, game) {
-					console.log(game);
+					if (err) {
+						res.send(err);
+					}
 					// For each goal
 					goals.forEach(function(extractedGoal) {
 						// Our new goal object
@@ -1819,12 +1824,13 @@ var App = function() {
 							teamFor = blueTeam;
 							blueGoalCount += 1;
 						}
-						console.log(teamFor.name);
 						// Find the scorer
 						Player.findOne({
 							name: scorerName
 						}, function(err, scorer) {
-							console.log(scorer);
+							if (err) {
+								res.send(err);
+							}
 							// Give them a goal and add to the new goal object, save
 							scorer.goals += 1;
 							goal.scorer = scorer._id;
@@ -1833,25 +1839,28 @@ var App = function() {
 								Player.findOne({
 									name: assisterName
 								}, function(err, assister) {
-									console.log(assister);
+									if (err) {
+										res.send(err);
+									}
 									// Give them an assist and add to the new goal object, save
 									assister.assists += 1;
 									goal.assister = assister._id;
 									assister.save(function(err) {
+										if (err) {
+											res.send(err);
+										}
 										// Set up the rest of the goal doc and save
 										goal.team = teamFor._id;
 										goal.game = game._id;
 										goal.period = period;
-										console.log(goal);
 										goalDoc = new Goal(goal);
 										goalDoc.save(function(err) {
-											console.log(redGoalCount);
-											console.log(blueGoalCount);
-											console.log(totalGoals);
+											if (err) {
+												res.send(err);
+											}
 											// If the number of goals that have been submitted equals
 											// the total number of goals in the request, save the game and respond.
 											if (redGoalCount + blueGoalCount == totalGoals) {
-												console.log("All goals done");
 												game.redScore = redGoalCount;
 												game.blueScore = blueGoalCount;
 												game.save(function(err) {
