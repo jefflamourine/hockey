@@ -22,7 +22,6 @@ var App = function() {
 	self.dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD || 'pass';
 
 	// Mongoose setup
-
 	var Schema = mongoose.Schema;
 
 	var mongoConnectionString = "mongodb://" + self.dbUser + ":" + self.dbPass + "@" + self.mongoHost + ":" + self.mongoPort + "/" + self.mongoDbName;

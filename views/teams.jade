@@ -22,10 +22,20 @@ html
 		table.h-center
 			tr.table-header
 				td Name 
+				td Abbr
+				td Wins
+				td OT Wins
+				td OT Losses
+				td Losses
 				td Roster
 			for team in teams
 				tr
 					td= team.name
+					td= team.abbr
+					td= team.w
+					td= team.otw
+					td= team.otl
+					td= team.l
 					td
 						for player in team.roster
 							span
