@@ -11,7 +11,7 @@ var dbPass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD || 'pass';
 
 var Schema = mongoose.Schema;
 
-var mongoConnectionString = "mongodb://" + self.dbUser + ":" + self.dbPass + "@" + self.mongoHost + ":" + self.mongoPort + "/" + self.mongoDbName;
+var mongoConnectionString = "mongodb://" + dbUser + ":" + dbPass + "@" + mongoHost + ":" + mongoPort + "/" + mongoDbName;
 mongoose.connect(mongoConnectionString);
 var db = mongoose.connection;
 
@@ -1580,6 +1580,8 @@ function saveGames(start, total) {
 	games[start - 1].save(function(err, games) {
 		if (start < total) {
 			saveGames(start + 1, total);
+		} else {
+			console.log("Done");
 		}
 	})
 }
