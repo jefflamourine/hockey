@@ -34,9 +34,13 @@ var App = function() {
 	var accountSchema = new Schema({
 		username: {
 			type: String,
-			unique: true
+			unique: true,
+			required: true
 		},
-		password: String,
+		password: {
+			type: String,
+			required: true
+		},
 		permissions: [String]
 	});
 
@@ -45,12 +49,25 @@ var App = function() {
 	var playerSchema = new Schema({
 		name: {
 			type: String,
-			unique: true
+			unique: true,
+			required: true
 		},
-		active: Boolean,
-		gamesPlayed: Number,
-		goals: Number,
-		assists: Number
+		active: {
+			type: Boolean,
+			required: true,
+		},
+		gamesPlayed: {
+			type: Number,
+			required: true,
+		},
+		goals: {
+			type: Number,
+			required: true,
+		},
+		assists: {
+			type: Number,
+			required: true
+		}
 	});
 
 	playerSchema.plugin(uniqueValidator);
@@ -58,20 +75,37 @@ var App = function() {
 	var teamSchema = new Schema({
 		name: {
 			type: String,
-			unique: true
+			unique: true,
+			required: true
 		},
 		abbr: {
 			type: String,
-			unique: true
+			unique: true,
+			required: true
 		},
-		roster: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}],
-		w: Number,
-		otw: Number,
-		otl: Number,
-		l: Number
+		roster: {
+			type: [{
+				type: Schema.Types.ObjectId,
+				ref: 'Player'
+			}],
+			required: true
+		},
+		w: {
+			type: Number,
+			required: true
+		},
+		otw: {
+			type: Number,
+			required: true
+		},
+		otl: {
+			type: Number,
+			required: true
+		},
+		l: {
+			type: Number,
+			required: true
+		},
 	});
 
 	teamSchema.plugin(uniqueValidator);
@@ -87,20 +121,29 @@ var App = function() {
 		},
 		game: {
 			type: Schema.Types.ObjectId,
-			ref: 'Game'
+			ref: 'Game',
+			required: true
 		},
 		team: {
 			type: Schema.Types.ObjectId,
-			ref: 'Team'
+			ref: 'Team',
+			required: true
 		},
-		period: Number
+		period: {
+			type: Number,
+			required: true
+		}
 	});
 
 	var gameSchema = new Schema({
-		date: Date,
+		date: {
+			type: Date,
+			required: true
+		},
 		blue: {
 			type: Schema.ObjectId,
-			ref: 'Team'
+			ref: 'Team',
+			required: true
 		},
 		bluePlayedGames: {
 			forwards: [{
@@ -116,10 +159,14 @@ var App = function() {
 				ref: 'Player'
 			}]
 		},
-		blueScore: Number,
+		blueScore: {
+			type: Number,
+			required: true
+		},
 		red: {
 			type: Schema.ObjectId,
-			ref: 'Team'
+			ref: 'Team',
+			required: true
 		},
 		redPlayedGames: {
 			forwards: [{
@@ -135,7 +182,10 @@ var App = function() {
 				ref: 'Player'
 			}]
 		},
-		redScore: Number
+		redScore: {
+			type: Number,
+			required: true
+		}
 	});
 
 	var Account = mongoose.model('Account', accountSchema);
