@@ -380,6 +380,7 @@ var App = function() {
 	// I should use promises... promises are hard.
 	self.routes['try-submit-goals'] = function(req, res) {
 		self.writeSubmissionToFile(req.body);
+		console.log("Logged submission in case of errors");
 		// Grab data from body
 		var redTeamAbbr = req.body.red;
 		var blueTeamAbbr = req.body.blue;
@@ -395,12 +396,18 @@ var App = function() {
 			if (err) {
 				res.send(err);
 			}
+			if (!redTeam) {
+				res.send("Couldn't find red team");
+			}
 			// Then get blue team
 			Team.findOne({
 				abbr: blueTeamAbbr
 			}, function(err, blueTeam) {
 				if (err) {
 					res.send(err);
+				}
+				if (!blueTeam) {
+					res.send("Couldn't find blue team");
 				}
 				// Query for the game
 				Game.findOne({
@@ -410,6 +417,9 @@ var App = function() {
 				}, function(err, game) {
 					if (err) {
 						res.send(err);
+					}
+					if (!game) {
+						res.send("Couldn't find game");
 					}
 					// For each goal
 					goals.forEach(function(extractedGoal) {
@@ -434,6 +444,9 @@ var App = function() {
 							if (err) {
 								res.send(err);
 							}
+							if (!scorer) {
+								res.send("Couldn't find scorer");
+							}
 							// Give them a goal and add to the new goal object, save
 							scorer.goals += 1;
 							goal.scorer = scorer._id;
@@ -444,6 +457,9 @@ var App = function() {
 								}, function(err, assister) {
 									if (err) {
 										res.send(err);
+									},
+									if (!assister) {
+										res.send("Couldn't find assister");
 									}
 									// Give them an assist and add to the new goal object, save
 									assister.assists += 1;
@@ -451,7 +467,7 @@ var App = function() {
 									assister.save(function(err) {
 										if (err) {
 											res.send(err);
-										}
+										},
 										// Set up the rest of the goal doc and save
 										goal.team = teamFor._id;
 										goal.game = game._id;
