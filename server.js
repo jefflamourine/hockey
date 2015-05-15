@@ -24,6 +24,7 @@ var App = function() {
 
 	// Set up constants
 	self.dataDir = process.env.OPENSHIFT_DATA_DIR || __dirname + '/data/';
+	self.submissionLog = self.dataDir + 'submissions.txt';
 
 	self.ipaddr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 	self.port = parseInt(process.env.OPENSHIFT_NODEJS_PORT) || 8080;
@@ -511,8 +512,8 @@ var App = function() {
 	};
 
 	self.writeSubmissionToFile = function(body) {
-		var filename = new Date().toDateString();
-		fs.writeFile(self.dataDir + "filename", body, function(err) {
+		var date = new Date().toUTCString();
+		fs.appendFile(self.submissionLog, date + ": " + JSON.stringify(body) + "\n", function(err) {
 			if (err) {
 				console.log(body);
 				return console.log(err);
