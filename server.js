@@ -6,6 +6,7 @@ var uniqueValidator = require('mongoose-unique-validator');
 var pwhash = require('password-hash');
 var session = require('client-sessions');
 var Q = require('q');
+var fs = require('fs');
 
 function trimName(name) {
 	var tagIndex = name.indexOf('(');
@@ -20,6 +21,8 @@ var App = function() {
 	var self = this;
 
 	// Set up constants
+	self.dataDir = process.env.OPENSHIFT_DATA_DIR || __dirname + '/data/';
+
 	self.ipaddr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 	self.port = parseInt(process.env.OPENSHIFT_NODEJS_PORT) || 8080;
 	self.mongoHost = process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1';
@@ -373,7 +376,7 @@ var App = function() {
 	// Example POST body: {"red": "ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
 	// I should use promises... promises are hard.
 	self.routes['try-submit-goals'] = function(req, res) {
-		console.log(req.body);
+		writeSubmissionToFile(req.body);
 		// Grab data from body
 		var redTeamAbbr = req.body.red;
 		var blueTeamAbbr = req.body.blue;
@@ -500,6 +503,16 @@ var App = function() {
 			});
 		});
 	};
+
+	self.writeSubmissionToFile = function(body) {
+		var filename = new Date().toDateString();
+		fs.writeFile(self.dataDir + "filename", body, function(err) {
+			if (err) {
+				console.log(body);
+				return console.log(err);
+			}
+		});
+	}
 
 	// Create app
 	self.app = express();
