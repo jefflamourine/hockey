@@ -12,6 +12,8 @@ function trimName(name) {
 	var tagIndex = name.indexOf('(');
 	if (tagIndex !== -1) {
 		return name.substr(0, tagIndex).trim();
+	} else {
+		return name;
 	}
 }
 
@@ -376,7 +378,7 @@ var App = function() {
 	// Example POST body: {"red": "ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
 	// I should use promises... promises are hard.
 	self.routes['try-submit-goals'] = function(req, res) {
-		writeSubmissionToFile(req.body);
+		self.writeSubmissionToFile(req.body);
 		// Grab data from body
 		var redTeamAbbr = req.body.red;
 		var blueTeamAbbr = req.body.blue;
@@ -463,7 +465,7 @@ var App = function() {
 											if (redGoalCount + blueGoalCount == totalGoals) {
 												game.redScore = redGoalCount;
 												game.blueScore = blueGoalCount;
-												if (redScore > blueScore) {
+												if (game.redScore > game.blueScore) {
 													if (period < 3) {
 														redTeam.w += 1;
 														blueTeam.l += 1;
@@ -471,7 +473,7 @@ var App = function() {
 														redTeam.otw += 1;
 														blueTeam.otl += 1;
 													}
-												} else if (blueScore > redScore) {
+												} else if (game.blueScore > game.redScore) {
 													if (period < 3) {
 														blueTeam.w += 1;
 														redTeam.l += 1;
@@ -481,10 +483,14 @@ var App = function() {
 													}
 												}
 												redTeam.save(function(err) {
-													console.log(err);
+													if (err) {
+														console.log(err);
+													}
 												});
 												blueTeam.save(function(err) {
-													console.log(err);
+													if (err) {
+														console.log(err);
+													}
 												});
 												game.save(function(err) {
 													if (err) {
