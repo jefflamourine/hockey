@@ -49,8 +49,7 @@ var App = function() {
 	var playerSchema = new Schema({
 		name: {
 			type: String,
-			unique: true,
-			required: true
+			unique: true
 		},
 		active: {
 			type: Boolean,
