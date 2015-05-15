@@ -7,6 +7,13 @@ var pwhash = require('password-hash');
 var session = require('client-sessions');
 var Q = require('q');
 
+function trimName(name) {
+	var tagIndex = name.indexOf('(');
+	if (tagIndex !== -1) {
+		return name.substr(0, tagIndex).trim();
+	}
+}
+
 var App = function() {
 
 	// Scope
@@ -402,8 +409,8 @@ var App = function() {
 					goals.forEach(function(extractedGoal) {
 						// Our new goal object
 						var goal = {};
-						var scorerName = extractedGoal.scorer;
-						var assisterName = extractedGoal.assister;
+						var scorerName = trimName(extractedGoal.scorer);
+						var assisterName = trimName(extractedGoal.assister);
 						var period = extractedGoal.period;
 						var teamFor;
 						// Set teamFor to team who scored
@@ -453,7 +460,33 @@ var App = function() {
 											if (redGoalCount + blueGoalCount == totalGoals) {
 												game.redScore = redGoalCount;
 												game.blueScore = blueGoalCount;
+												if (redScore > blueScore) {
+													if (period < 3) {
+														redTeam.w += 1;
+														blueTeam.l += 1;
+													} else {
+														redTeam.otw += 1;
+														blueTeam.otl += 1;
+													}
+												} else if (blueScore > redScore) {
+													if (period < 3) {
+														blueTeam.w += 1;
+														redTeam.l += 1;
+													} else {
+														blueTeam.otw += 1;
+														redTeam.otl += 1;
+													}
+												}
+												redTeam.save(function(err) {
+													console.log(err);
+												});
+												blueTeam.save(function(err) {
+													console.log(err);
+												});
 												game.save(function(err) {
+													if (err) {
+														res.send(err);
+													}
 													res.send("Success");
 												});
 											}
