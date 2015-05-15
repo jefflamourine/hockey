@@ -457,7 +457,7 @@ var App = function() {
 								}, function(err, assister) {
 									if (err) {
 										res.send(err);
-									},
+									}
 									if (!assister) {
 										res.send("Couldn't find assister");
 									}
@@ -467,7 +467,7 @@ var App = function() {
 									assister.save(function(err) {
 										if (err) {
 											res.send(err);
-										},
+										}
 										// Set up the rest of the goal doc and save
 										goal.team = teamFor._id;
 										goal.game = game._id;
