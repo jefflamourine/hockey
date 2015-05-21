@@ -329,7 +329,8 @@ var App = function() {
 
 	self.routes['query-players'] = function(req, res) {
 		var query = req.body.query;
-		Player.find(query, function(err, players) {
+		var sort = req.body.sort;
+		Player.find(query).sort(sort).exec(function(err, players) {
 			if (err) {
 				res.send(err);
 			} else {

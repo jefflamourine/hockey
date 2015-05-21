@@ -21,6 +21,12 @@ html
 					div#register(onclick="location.href='/register';")
 						|Register
 
+						form(method='get', action='')
+
+		input#queryField.loginField(type='text', placeholder='Query')
+		input#sortField.loginField(type='text', placeholder='Sort')
+		input#submit.none(type='button', value='Query', onclick='getPlayers();')
+
 		table.h-center
 
 		script.
@@ -36,11 +42,14 @@ html
 				};
 			}
 			function getPlayers() {
+				var query = $( '#queryField' ).val();
+				if (query === "") { query = "{}" };
+				var sort = $( '#sortField' ).val();
 				$.ajax({
 					url: '/query-players',
 					type: 'POST',
 					contentType: 'application/json',
-					data: JSON.stringify( {} )
+					data: JSON.stringify({"query": JSON.parse(query), "sort": sort})
 				}).done(function(data) {
 					if (!data) {
 						console.log("Query failed");
@@ -63,7 +72,7 @@ html
 			}
 
 			function insertRow(d) {
-				$( 'table' ).append(buildRow(d));
+				$( 'table tr:first' ).after(buildRow(d));
 			}
 
 			function buildRow(d) {
