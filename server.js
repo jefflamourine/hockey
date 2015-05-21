@@ -327,19 +327,26 @@ var App = function() {
 		});
 	};
 
+	self.routes['query-players'] = function(req, res) {
+		var query = req.body.query;
+		Player.find(query, function(err, players) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.send(players);
+			}
+		});
+	}
+
 	// Players display page
 	self.routes['players'] = function(req, res) {
 		var session;
 		if (req.session && req.session.account) {
 			session = req.session.account.username;
 		}
-		Player.find({}, function(err, players) {
-			if (!players) players = [];
-			res.render('players', {
-				title: "Players",
-				session: session,
-				players: players
-			});
+		res.render('players', {
+			title: "Players",
+			session: session,
 		});
 	};
 
@@ -580,6 +587,7 @@ var App = function() {
 	self.app.post('/try-submit-goals', self.routes['try-submit-goals']);
 	self.app.get('/goals', self.routes['goals']);
 	self.app.get('/players', self.routes['players']);
+	self.app.post('/query-players', self.routes['query-players']);
 	self.app.get('/teams', self.routes['teams']);
 	self.app.get('/games', self.routes['games']);
 

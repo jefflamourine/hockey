@@ -5,6 +5,7 @@ html
 		title #{title}
 		link(rel='stylesheet', href='/final.css')
 		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
+		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
 	body
 		div#header
 			div#left
@@ -21,16 +22,52 @@ html
 						|Register
 
 		table.h-center
-			tr.table-header
-				td Name 
-				td Active
-				td Games Played
-				td Goals
-				td Assists
-			for player in players
-				tr
-					td= player.name
-					td= player.active
-					td= player.gamesPlayed
-					td= player.goals
-					td= player.assists
+
+		script.
+			if (!String.prototype.format) {
+				String.prototype.format = function() {
+					var args = arguments;
+					return this.replace(/{(\d+)}/g, function(match, number) { 
+						return typeof args[number] != 'undefined'
+							? args[number]
+							: match
+						;
+					});
+				};
+			}
+			function getPlayers() {
+				$.ajax({
+					url: '/query-players',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify( {} )
+				}).done(function(data) {
+					if (!data) {
+						console.log("Query failed");
+					} else {
+						buildTable(data);
+					}
+				});
+			}
+
+			function buildTable(data) {
+				$( 'table' ).empty();
+				insertHeader();
+				data.forEach(function(d) {
+					insertRow(d);
+				});
+			}
+
+			function insertHeader() {
+				$( 'table' ).append("<tr class='table-header'><td>Name</td><td>Active</td><td>Games Played</td><td>Goals</td><td>Assists</td></tr>");
+			}
+
+			function insertRow(d) {
+				$( 'table' ).append(buildRow(d));
+			}
+
+			function buildRow(d) {
+				return "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>".format(d.name, d.active, d.gamesPlayed, d.goals, d.assists);
+			}
+
+			getPlayers();
