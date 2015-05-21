@@ -389,141 +389,146 @@ var App = function() {
 		var totalGoals = goals.length;
 		var redGoalCount = 0;
 		var blueGoalCount = 0;
+		var processedGoals = 0;
 		// Query for red team
 		Team.findOne({
 			abbr: redTeamAbbr
 		}, function(err, redTeam) {
 			if (err) {
 				res.send(err);
-			}
-			if (!redTeam) {
+			} else if (!redTeam) {
 				res.send("Couldn't find red team");
-			}
-			// Then get blue team
-			Team.findOne({
-				abbr: blueTeamAbbr
-			}, function(err, blueTeam) {
-				if (err) {
-					res.send(err);
-				}
-				if (!blueTeam) {
-					res.send("Couldn't find blue team");
-				}
-				// Query for the game
-				Game.findOne({
-					date: date,
-					red: redTeam._id,
-					blue: blueTeam._id
-				}, function(err, game) {
+			} else {
+				// Then get blue team
+				Team.findOne({
+					abbr: blueTeamAbbr
+				}, function(err, blueTeam) {
 					if (err) {
 						res.send(err);
-					}
-					if (!game) {
-						res.send("Couldn't find game");
-					}
-					// For each goal
-					goals.forEach(function(extractedGoal) {
-						// Our new goal object
-						var goal = {};
-						var scorerName = trimName(extractedGoal.scorer);
-						var assisterName = trimName(extractedGoal.assister);
-						var period = extractedGoal.period;
-						var teamFor;
-						// Set teamFor to team who scored
-						if (extractedGoal.team == "red") {
-							teamFor = redTeam;
-							redGoalCount += 1;
-						} else {
-							teamFor = blueTeam;
-							blueGoalCount += 1;
-						}
-						// Find the scorer
-						Player.findOne({
-							name: scorerName
-						}, function(err, scorer) {
+					} else if (!blueTeam) {
+						res.send("Couldn't find blue team");
+					} else {
+						// Query for the game
+						Game.findOne({
+							date: date,
+							red: redTeam._id,
+							blue: blueTeam._id
+						}, function(err, game) {
 							if (err) {
 								res.send(err);
-							}
-							if (!scorer) {
-								res.send("Couldn't find scorer");
-							}
-							// Give them a goal and add to the new goal object, save
-							scorer.goals += 1;
-							goal.scorer = scorer._id;
-							scorer.save(function(err) {
-								// Find the assister
-								Player.findOne({
-									name: assisterName
-								}, function(err, assister) {
-									if (err) {
-										res.send(err);
+							} else if (!game) {
+								res.send("Couldn't find game");
+							} else {
+								// For each goal
+								goals.forEach(function(extractedGoal) {
+									// Our new goal object
+									var goal = {};
+									var scorerName = trimName(extractedGoal.scorer);
+									var assisterName = trimName(extractedGoal.assister);
+									var period = extractedGoal.period;
+									var teamFor;
+									// Set teamFor to team who scored
+									if (extractedGoal.team == "red") {
+										teamFor = redTeam;
+										redGoalCount += 1;
+									} else {
+										teamFor = blueTeam;
+										blueGoalCount += 1;
 									}
-									if (!assister) {
-										res.send("Couldn't find assister");
-									}
-									// Give them an assist and add to the new goal object, save
-									assister.assists += 1;
-									goal.assister = assister._id;
-									assister.save(function(err) {
+									// Find the scorer
+									Player.findOne({
+										name: scorerName
+									}, function(err, scorer) {
 										if (err) {
 											res.send(err);
-										}
-										// Set up the rest of the goal doc and save
-										goal.team = teamFor._id;
-										goal.game = game._id;
-										goal.period = period;
-										goalDoc = new Goal(goal);
-										goalDoc.save(function(err) {
-											if (err) {
-												res.send(err);
-											}
-											// If the number of goals that have been submitted equals
-											// the total number of goals in the request, save the game and respond.
-											if (redGoalCount + blueGoalCount == totalGoals) {
-												game.redScore = redGoalCount;
-												game.blueScore = blueGoalCount;
-												if (game.redScore > game.blueScore) {
-													if (period < 3) {
-														redTeam.w += 1;
-														blueTeam.l += 1;
-													} else {
-														redTeam.otw += 1;
-														blueTeam.otl += 1;
-													}
-												} else if (game.blueScore > game.redScore) {
-													if (period < 3) {
-														blueTeam.w += 1;
-														redTeam.l += 1;
-													} else {
-														blueTeam.otw += 1;
-														redTeam.otl += 1;
-													}
-												}
-												redTeam.save(function(err) {
-													if (err) {
-														console.log(err);
-													}
-												});
-												blueTeam.save(function(err) {
-													if (err) {
-														console.log(err);
-													}
-												});
-												game.save(function(err) {
+										} else if (!scorer) {
+											res.send("Couldn't find scorer");
+										} else {
+											// Give them a goal and add to the new goal object, save
+											scorer.goals += 1;
+											goal.scorer = scorer._id;
+											scorer.save(function(err) {
+												// Find the assister
+												Player.findOne({
+													name: assisterName
+												}, function(err, assister) {
 													if (err) {
 														res.send(err);
+													} else if (!assister) {
+														res.send("Couldn't find assister");
+													} else {
+														// Give them an assist and add to the new goal object, save
+														assister.assists += 1;
+														goal.assister = assister._id;
+														assister.save(function(err) {
+															if (err) {
+																res.send(err);
+															} else {
+																// Set up the rest of the goal doc and save
+																goal.team = teamFor._id;
+																goal.game = game._id;
+																goal.period = period;
+																goalDoc = new Goal(goal);
+																goalDoc.save(function(err) {
+																	if (err) {
+																		res.send(err);
+																	} else {
+																		processedGoals++;
+																		// If the number of goals that have been processed equals
+																		// the total number of goals in the request, save the game and respond.
+																		if (processedGoals == totalGoals) {
+																			game.redScore = redGoalCount;
+																			game.blueScore = blueGoalCount;
+																			if (game.redScore > game.blueScore) {
+																				if (period < 3) {
+																					redTeam.w += 1;
+																					blueTeam.l += 1;
+																				} else {
+																					redTeam.otw += 1;
+																					blueTeam.otl += 1;
+																				}
+																			} else if (game.blueScore > game.redScore) {
+																				if (period < 3) {
+																					blueTeam.w += 1;
+																					redTeam.l += 1;
+																				} else {
+																					blueTeam.otw += 1;
+																					redTeam.otl += 1;
+																				}
+																			}
+																			redTeam.save(function(err) {
+																				if (err) {
+																					console.log(err);
+																				}
+																			});
+																			blueTeam.save(function(err) {
+																				if (err) {
+																					console.log(err);
+																				}
+																			});
+																			game.save(function(err) {
+																				if (err) {
+																					res.send(err);
+																				} else {
+																					res.send("Success");
+																				}
+																			});
+																		}
+																	}
+																});
+															}
+														});
 													}
-													res.send("Success");
 												});
-											}
-										});
+											});
+										}
 									});
 								});
-							});
+							}
 						});
-					});
+					}
 				});
-			});
+			}
 		});
 	};
 

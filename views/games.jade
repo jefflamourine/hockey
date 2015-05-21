@@ -22,16 +22,16 @@ html
 		table.h-center
 			tr.table-header
 				td Date 
-				td Blue
+				td Red
 				td 
 				td
-				td Red
+				td Blue
 			for game in games
 				tr
 					td= game.date.toDateString()
-					if game.blue
-						td= game.blue.abbr
-					td= game.blueScore
-					td= game.redScore
 					if game.red
 						td= game.red.abbr
+					td= game.blueScore
+					td= game.redScore
+					if game.blue
+						td= game.blue.abbr
