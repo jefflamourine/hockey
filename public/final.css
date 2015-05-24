@@ -95,10 +95,14 @@ td {
 	background-color: #B0B0B0;
 	border: 2px solid #C0C0C0;
 	padding: 0.5em;
-	box-shadow: 0px 0px 10px  #888;
 }
 
-.table-header {
+th {
 	font-size: 16;
 	background-color: #D0D0D0;
+	border: 2px solid #C0C0C0;
+	padding: 0.5em;
+}
+th:hover {
+	background-color: #E0E0E0;
 }

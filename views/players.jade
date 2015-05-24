@@ -23,13 +23,28 @@ html
 
 						form(method='get', action='')
 
-		input#queryField.loginField(type='text', placeholder='Query')
-		input#sortField.loginField(type='text', placeholder='Sort')
-		input#submit.none(type='button', value='Query', onclick='getPlayers();')
+		input#queryField(type='text', placeholder='Query')
+		input#submit(type='button', value='Query', onclick='getPlayers();')
 
 		table.h-center
+			thead
+				tr(class='table-header')
+					th(id='nameHeader', onclick='sortBy("name");')
+						|Name
+					th(id='activeHeader', onclick='sortBy("active");')
+						|Active
+					th(id='gpHeader', onclick='sortBy("gamesPlayed");')
+						|Games Played
+					th(id='goalsHeader', onclick='sortBy("goals");')
+						|Goals
+					th(id='assistsHeader', onclick='sortBy("assists");')
+						|Assists
+			tbody
 
 		script.
+
+			var currentSort = "";
+
 			if (!String.prototype.format) {
 				String.prototype.format = function() {
 					var args = arguments;
@@ -38,10 +53,26 @@ html
 					});
 				};
 			}
-			function getPlayers() {
+
+			function sortBy(sort) {
+				console.log("Current: " + currentSort);
+				console.log("Requested: " + sort);
+				var reverseSort = "-" + sort;
+				if (currentSort === sort) {
+					currentSort = reverseSort;
+					getPlayers(reverseSort);
+				} else if (currentSort === reverseSort) {
+					currentSort = sort;
+					getPlayers(sort);
+				} else {
+					currentSort = sort;
+					getPlayers(sort);
+				}
+			}
+
+			function getPlayers(sort) {
 				var query = $( '#queryField' ).val();
 				if (query === "") { query = "{}" };
-				var sort = $( '#sortField' ).val();
 				$.ajax({
 					url: '/query-players',
 					type: 'POST',
@@ -57,23 +88,18 @@ html
 			}
 
 			function buildTable(data) {
-				$( 'table' ).empty();
-				insertHeader();
+				$( 'tbody' ).empty();
 				data.forEach(function(d) {
 					insertRow(d);
 				});
 			}
 
-			function insertHeader() {
-				$( 'table' ).append("<tr class='table-header'><td>Name</td><td>Active</td><td>Games Played</td><td>Goals</td><td>Assists</td></tr>");
-			}
-
 			function insertRow(d) {
-				$( 'table tr:first' ).after(buildRow(d));
+				$( 'tbody' ).prepend(buildRow(d));
 			}
 
 			function buildRow(d) {
 				return "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>".format(d.name, d.active, d.gamesPlayed, d.goals, d.assists);
 			}
 
-			getPlayers();
+			getPlayers("");
