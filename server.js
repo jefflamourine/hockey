@@ -223,6 +223,17 @@ var App = function() {
 		});
 	};
 
+	self.routes['new-layout'] = function(req, res) {
+		var session;
+		if (req.session && req.session.account) {
+			session = req.session.account.username;
+		}
+		res.render('new-layout', {
+			title: "Home",
+			session: session
+		});
+	}
+
 	// Health
 	self.routes['health'] = function(req, res) {
 		res.send('1');
@@ -577,6 +588,7 @@ var App = function() {
 
 	// URL Mappings
 	self.app.get('/', self.routes['root']);
+	self.app.get('/new-layout', self.routes['new-layout']);
 	self.app.get('/health', self.routes['health']);
 	self.app.get('/session', self.routes['session']);
 	self.app.get('/register', self.routes['register']);

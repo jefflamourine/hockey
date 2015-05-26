@@ -3,9 +3,22 @@ html
 	head
 		meta(charset='UTF-8')
 		title #{title}
-		link(rel='stylesheet', href='/main.css')
+		link(rel='stylesheet', href='/final.css')
 		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
 	body
+		div#header
+			div#left
+				div#home(onclick="location.href='/';")
+					|Home
+			div#right
+				if session
+					div#session(onclick="location.href='/dashboard';")
+						|#{session}
+				else
+					div#login(onclick="location.href='/login';")
+						|Log In
+					div#register(onclick="location.href='/register';")
+						|Register
 		table.h-center.v-center
 			tr.table-header
 				td Scorer 

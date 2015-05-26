@@ -1,0 +1,57 @@
+doctype
+html
+	head
+		meta(charset='UTF-8')
+		title #{title}
+		link(rel='stylesheet', href='/final.css')
+		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Roboto:400,100,300')
+		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
+		script.
+			if (document.location.hostname !== "localhost") {
+				var loc = window.location+'';
+				if (loc.indexOf('http://')==0) {
+					window.location.href = loc.replace('http://','https://');
+				}
+			}
+	body
+		div#content
+			div#session-info.border.right
+				if session
+					div.fill.center-contents.hover(onclick="location.href='/dashboard';")
+						|#{session}
+				else 
+					div#form-container.center-contents
+						span#form-response
+						div#fields
+							input#userField.field(type='text', placeholder='Username' onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'")
+							input#passField.field(type='password', placeholder='Password' onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'")
+						div#buttons
+							input#login.button(type='button', value='Login', onclick='tryRegister();')
+							input#register.button(type='button', value='Register', onclick='tryRegister();')
+			div#nav
+				div#first.border.left.bottom.right.center-contents.hover(onclick="location.href='/games';")
+					|Games
+				div#second.border.left.bottom.center-contents.hover(onclick="location.href='/teams';")
+					|Teams
+				div#third.border.left.top.right.center-contents.hover(onclick="location.href='/players';")
+					|Players
+				div#last.border.left.top.center-contents.hover(onclick="location.href='/goals';")
+					|Goals
+
+		script.
+			function tryRegister() {
+				var username = $('#userField').val();
+				var password = $('#passField').val();
+				$.ajax({
+					url: '/try-register',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify( {username: username, password: password} )
+				}).done(function(data) {
+					if (!data) {
+						$('#form-response').html("Registration was not successful");
+					} else {
+						$('#form-response').html("Registration was successful");
+					}
+				});
+			}
