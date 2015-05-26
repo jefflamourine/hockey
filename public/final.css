@@ -127,7 +127,7 @@ html {
 	height: 50%;
 }
 
-@media (max-width: 800px) {
+@media screen and (orientation:portrait) {
 	#content {
 		height: 140vh;
 	}
