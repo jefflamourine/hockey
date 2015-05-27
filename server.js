@@ -223,17 +223,6 @@ var App = function() {
 		});
 	};
 
-	self.routes['new-layout'] = function(req, res) {
-		var session;
-		if (req.session && req.session.account) {
-			session = req.session.account.username;
-		}
-		res.render('new-layout', {
-			title: "Home",
-			session: session
-		});
-	}
-
 	// Health
 	self.routes['health'] = function(req, res) {
 		res.send('1');
@@ -246,13 +235,6 @@ var App = function() {
 		} else {
 			res.send("No valid session");
 		}
-	};
-
-	// Registration form
-	self.routes['register'] = function(req, res) {
-		res.render('register', {
-			title: 'Register'
-		});
 	};
 
 	// Registration form submit
@@ -276,13 +258,6 @@ var App = function() {
 		});
 	};
 
-	// Login form
-	self.routes['login'] = function(req, res) {
-		res.render('login', {
-			title: 'Login'
-		});
-	};
-
 	// Login form submit
 	self.routes['try-login'] = function(req, res) {
 		var username = req.body.data.username;
@@ -294,26 +269,10 @@ var App = function() {
 			if (account) {
 				if (pwhash.verify(password, account.password)) {
 					req.session.account = account;
-					res.redirect('/dashboard');
-				} else {
-					res.redirect('/');
 				}
-			} else {
-				res.redirect('/');
 			}
-		});
-	};
-
-	// Dashboard
-	self.routes['dashboard'] = function(req, res) {
-		if (req.session && req.session.account) {
-			res.render('dashboard', {
-				title: 'Dashboard',
-				username: req.session.account.username
-			});
-		} else {
 			res.redirect('/');
-		}
+		});
 	};
 
 	// Logout
@@ -588,14 +547,10 @@ var App = function() {
 
 	// URL Mappings
 	self.app.get('/', self.routes['root']);
-	self.app.get('/new-layout', self.routes['new-layout']);
 	self.app.get('/health', self.routes['health']);
 	self.app.get('/session', self.routes['session']);
-	self.app.get('/register', self.routes['register']);
 	self.app.post('/try-register', self.routes['try-register']);
-	self.app.get('/login', self.routes['login']);
 	self.app.post('/try-login', self.routes['try-login']);
-	self.app.get('/dashboard', self.routes['dashboard']);
 	self.app.get('/try-logout', self.routes['try-logout']);
 	self.app.post('/try-submit-goals', self.routes['try-submit-goals']);
 	self.app.get('/goals', self.routes['goals']);

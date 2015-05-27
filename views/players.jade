@@ -3,41 +3,34 @@ html
 	head
 		meta(charset='UTF-8')
 		title #{title}
-		link(rel='stylesheet', href='/final.css')
+		link(rel='stylesheet', href='/main.css')
 		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
 		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
 	body
 		div#header
 			div#left
-				div#home(onclick="location.href='/';")
+				div#home.hover(onclick="location.href='/';")
 					|Home
 			div#right
 				if session
-					div#session(onclick="location.href='/dashboard';")
+					div#session.hover
 						|#{session}
-				else
-					div#login(onclick="location.href='/login';")
-						|Log In
-					div#register(onclick="location.href='/register';")
-						|Register
-
-						form(method='get', action='')
-
+		form(method='get', action='')
 		input#queryField(type='text', placeholder='Query')
 		input#submit(type='button', value='Query', onclick='getPlayers();')
 
 		table.h-center
 			thead
 				tr(class='table-header')
-					th(id='nameHeader', onclick='sortBy("name");')
+					th.hover(id='nameHeader', onclick='sortBy("name");')
 						|Name
-					th(id='activeHeader', onclick='sortBy("active");')
+					th.hover(id='activeHeader', onclick='sortBy("active");')
 						|Active
-					th(id='gpHeader', onclick='sortBy("gamesPlayed");')
+					th.hover(id='gpHeader', onclick='sortBy("gamesPlayed");')
 						|Games Played
-					th(id='goalsHeader', onclick='sortBy("goals");')
+					th.hover(id='goalsHeader', onclick='sortBy("goals");')
 						|Goals
-					th(id='assistsHeader', onclick='sortBy("assists");')
+					th.hover(id='assistsHeader', onclick='sortBy("assists");')
 						|Assists
 			tbody
 
