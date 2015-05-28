@@ -5,33 +5,72 @@ html
 		title #{title}
 		link(rel='stylesheet', href='/main.css')
 		link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Open+Sans')
+		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
 	body
 		div#header
 			div#left
-				div#home(onclick="location.href='/';")
+				div#home.hover(onclick="location.href='/';")
 					|Home
 			div#right
 				if session
-					div#session(onclick="location.href='/dashboard';")
+					div#session.hover
 						|#{session}
-				else
-					div#login(onclick="location.href='/login';")
-						|Log In
-					div#register(onclick="location.href='/register';")
-						|Register
+		form(method='get', action='')
+		input#queryField(type='text', placeholder='Team')
+		input#submit(type='button', value='Query', onclick='getGames();')
 		table.h-center
-			tr.table-header
-				td Date 
-				td Red
-				td 
-				td
-				td Blue
-			for game in games
-				tr
-					td= game.date.toDateString()
-					if game.red
-						td= game.red.abbr
-					td= game.blueScore
-					td= game.redScore
-					if game.blue
-						td= game.blue.abbr
+			thead
+				tr(class='table-header')
+					th(id='nameHeader')
+						|Date
+					th(id='activeHeader')
+						|Red
+					th
+					th
+					th(id='assistsHeader')
+						|Blue
+			tbody
+		script.
+
+			if (!String.prototype.format) {
+				String.prototype.format = function() {
+					var args = arguments;
+					return this.replace(/{(\d+)}/g, function(match, number) {
+						return typeof args[number] != 'undefined' ? args[number] : match;
+					});
+				};
+			}
+
+			function getGames() {
+				var team = $( '#queryField' ).val();
+				var query = "{}";
+				$.ajax({
+					url: '/query-games',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify({"query": JSON.parse(query), "team": team})
+				}).done(function(data) {
+					if (!data) {
+						console.log("Query failed");
+					} else {
+						buildTable(data);
+					}
+				});
+			}
+
+			function buildTable(data) {
+				$( 'tbody' ).empty();
+				data.forEach(function(d) {
+					insertRow(d);
+				});
+			}
+
+			function insertRow(d) {
+				$( 'tbody' ).append(buildRow(d));
+			}
+
+			function buildRow(d) {
+				return "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>".format(new Date(d.date).toDateString(), d.red.abbr, d.redScore, d.blueScore, d.blue.abbr);
+			}
+
+			getGames();
