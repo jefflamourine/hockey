@@ -1,3 +1,7 @@
+/*
+The functions that are mapped to URLs which handle http(s) requests and send responses
+ */
+
 var mongoose = require('mongoose');
 var Account = require('./models/models').Account;
 var Player = require('./models/models').Player;
@@ -6,6 +10,11 @@ var Goal = require('./models/models').Goal;
 var Game = require('./models/models').Game;
 
 var pwhash = require('password-hash');
+var fs = require('fs');
+var async = require('async');
+
+var dataDir = process.env.OPENSHIFT_DATA_DIR || __dirname + '/data/';
+var submissionLog = dataDir + 'submissions.txt';
 
 // Trim a player name up to the tag (First open parene)
 function trimName(name) {
@@ -195,161 +204,195 @@ routes['goals'] = function(req, res) {
 	});
 };
 
-// Goal submit (via stats extractor)
-// Example POST body: {"red": "ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
-// I should use promises... promises are hard.
+function verifyGame(red, blue, date, callback) {
+	async.parallel(
+		{
+			red: function(cb) {
+				Team.findOne({abbr: red}, cb);
+			},
+			blue: function(cb) {
+				Team.findOne({abbr: blue}, cb);
+			},
+		},
+		function(err, teams) {
+			if (err) {
+				console.log(err);
+				callback("0");
+			} else if (!(teams.red && teams.blue)) {
+				callback("2");
+			} else {
+				Game.findOne({
+					red: teams.red._id,
+					blue: teams.blue._id,
+					date: date
+				}, function(err, game) {
+					if (err) {
+						console.log(err);
+						callback("0");
+					} else if (!game) {
+						callback("3");
+					} else {
+						callback("1");
+					}
+				});
+			}
+		}
+	);
+}
+
+// Game verification (for stats extractor)
+// Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00"}
+// Error codes (sent in response) 0 - Unknown err, 1 - Success, 2 - Team not found, 3 - Game not found
+// Used to validate if the stats extractor was started correctly.
+routes['verify-game'] = function(req, res) {
+	var red = req.body.red;
+	var blue = req.body.blue;
+	var date = req.body.date;
+	findGame(red, blue, date, function(code) {
+		res.send(code);
+	})
+}
+
+// Goal submit (for stats extractor)
+// Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
 routes['try-submit-goals'] = function(req, res) {
 	writeSubmissionToFile(req.body);
-	console.log("Logged submission in case of errors");
-	// Grab data from body
-	var redTeamAbbr = req.body.red;
-	var blueTeamAbbr = req.body.blue;
-	var date = req.body.date;
-	var goals = req.body.goals;
-	var totalGoals = goals.length;
+
 	var redGoalCount = 0;
 	var blueGoalCount = 0;
-	var processedGoals = 0;
-	// Query for red team
-	Team.findOne({
-		abbr: redTeamAbbr
-	}, function(err, redTeam) {
-		if (err) {
-			res.send(err);
-		} else if (!redTeam) {
-			res.send("Couldn't find red team");
-		} else {
-			// Then get blue team
-			Team.findOne({
-				abbr: blueTeamAbbr
-			}, function(err, blueTeam) {
-				if (err) {
-					res.send(err);
-				} else if (!blueTeam) {
-					res.send("Couldn't find blue team");
-				} else {
-					// Query for the game
-					Game.findOne({
-						date: date,
-						red: redTeam._id,
-						blue: blueTeam._id
-					}, function(err, game) {
-						if (err) {
-							res.send(err);
-						} else if (!game) {
-							res.send("Couldn't find game");
-						} else {
-							// For each goal
-							goals.forEach(function(extractedGoal) {
-								// Our new goal object
-								var goal = {};
-								var scorerName = trimName(extractedGoal.scorer);
-								var assisterName = trimName(extractedGoal.assister);
-								var period = extractedGoal.period;
-								var teamFor;
-								// Set teamFor to team who scored
-								if (extractedGoal.team == "red") {
-									teamFor = redTeam;
-									redGoalCount += 1;
-								} else {
-									teamFor = blueTeam;
-									blueGoalCount += 1;
-								}
-								// Find the scorer
-								Player.findOne({
-									name: scorerName
-								}, function(err, scorer) {
-									if (err) {
-										res.send(err);
-									} else if (!scorer) {
-										res.send("Couldn't find scorer");
-									} else {
-										// Give them a goal and add to the new goal object, save
-										scorer.goals += 1;
-										goal.scorer = scorer._id;
-										scorer.save(function(err) {
-											// Find the assister
-											Player.findOne({
-												name: assisterName
-											}, function(err, assister) {
-												if (err) {
-													res.send(err);
-												} else if (!assister) {
-													res.send("Couldn't find assister");
-												} else {
-													// Give them an assist and add to the new goal object, save
-													assister.assists += 1;
-													goal.assister = assister._id;
-													assister.save(function(err) {
-														if (err) {
-															res.send(err);
-														} else {
-															// Set up the rest of the goal doc and save
-															goal.team = teamFor._id;
-															goal.game = game._id;
-															goal.period = period;
-															goalDoc = new Goal(goal);
-															goalDoc.save(function(err) {
-																if (err) {
-																	res.send(err);
-																} else {
-																	processedGoals++;
-																	// If the number of goals that have been processed equals
-																	// the total number of goals in the request, save the game and respond.
-																	if (processedGoals == totalGoals) {
-																		game.redScore = redGoalCount;
-																		game.blueScore = blueGoalCount;
-																		if (game.redScore > game.blueScore) {
-																			if (period < 3) {
-																				redTeam.w += 1;
-																				blueTeam.l += 1;
-																			} else {
-																				redTeam.otw += 1;
-																				blueTeam.otl += 1;
-																			}
-																		} else if (game.blueScore > game.redScore) {
-																			if (period < 3) {
-																				blueTeam.w += 1;
-																				redTeam.l += 1;
-																			} else {
-																				blueTeam.otw += 1;
-																				redTeam.otl += 1;
-																			}
-																		}
-																		redTeam.save(function(err) {
-																			if (err) {
-																				console.log(err);
-																			}
-																		});
-																		blueTeam.save(function(err) {
-																			if (err) {
-																				console.log(err);
-																			}
-																		});
-																		game.save(function(err) {
-																			if (err) {
-																				res.send(err);
-																			} else {
-																				res.send("Success");
-																			}
-																		});
-																	}
-																}
-															});
-														}
-													});
-												}
-											});
-										});
-									}
-								});
-							});
-						}
-					});
+	var lastGoalPeriod = 0;
+
+	// Main async wrapper to deal with all mongo queries.
+	async.waterfall([
+		// Query for the two teams in parallel
+		function(callback) {
+			async.parallel([
+				// Red team
+				function(cb) {
+					Team.findOne({abbr: req.body.red}, cb);
+				},
+				// Blue team
+				function(cb) {
+					Team.findOne({abbr: req.body.blue}, cb);
+				},
+			], function(err, teams) {
+				teamsObj = {"red": teams[0], "blue": teams[1]};
+				callback(err, teamsObj);
+			});
+		},
+		// Use the two teams (now that we have IDs), and date to find a game
+		function(teams, callback) {
+			Game.findOne({
+				red: teams.red._id,
+				blue: teams.blue._id,
+				date: req.body.date
+			}, function(err, game) {
+				callback(err, teams, game)
+			});
+		},
+		// The heavy lifting
+		function(teams, game, callback) {
+			// The period where the last goal was scored (to determine if OT occured)
+			// Iterate over all the goals in the request and do lots of async operations
+			async.forEach(req.body.goals, function(goal, cb) {
+				var goalObj = {};
+				var scorerName = trimName(goal.scorer);
+				var assisterName = trimName(goal.assister);
+				if (goal.period > lastGoalPeriod) {
+					lastGoalPeriod = goal.period;
 				}
+				var teamFor;
+				// Set teamFor to team who scored and count the goals
+				if (goal.team == "red") {
+					teamFor = teams.red;
+					redGoalCount += 1;
+				} else {
+					teamFor = teams.blue;
+					blueGoalCount += 1;
+				}
+				// Find scorer and assister in parallel
+				async.parallel([
+					function(pcb) {
+						Player.findOne({
+							name: scorerName
+						}, pcb);
+					},
+					function(pcb) {
+						Player.findOne({
+							name: assisterName
+						}, pcb);
+					}
+				], function(err, players) {
+					// Update scorer, assister, goal
+					if (!err) {
+						players[0].goals += 1;
+						goalObj.scorer = players[0]._id;
+						players[1].assists += 1;
+						goalObj.assister = players[1]._id;
+						goalObj.team = teamFor._id;
+						goalObj.game = game._id;
+						goalObj.period = goal.period;
+						goalDoc = new Goal(goalObj);
+						// We're done with the goal and players, so save in parallel
+						async.parallel([
+							function(pcb) {
+								goalDoc.save(pcb);
+							},
+							function(pcb) {
+								players[0].save(pcb);
+							},
+							function(pcb) {
+								players[1].save(pcb);
+							}
+						], function(err) {
+							cb(err);
+						});
+					} else {
+						cb(err);
+					}
+				})
+			}, function(err) {
+				callback(err, teams, game);
+			});
+		}, function(teams, game, callback) {
+			// Update the results of the game
+			game.redScore = redGoalCount;
+			game.blueScore = blueGoalCount;
+			if (game.redScore > game.blueScore) {
+				if (lastGoalPeriod < 3) {
+					teams.red.w += 1;
+					teams.blue.l += 1;
+				} else {
+					teams.red.otw += 1;
+					teams.blue.otl += 1;
+				}
+			} else if (game.blueScore > game.redScore) {
+				if (lastGoalPeriod < 3) {
+					teams.red.w += 1;
+					teams.blue.l += 1;
+				} else {
+					teams.red.otw += 1;
+					teams.blue.otl += 1;
+				}
+			}
+			// We're done with the game and teams, so save them in parallel
+			async.parallel([
+				function(scb) {
+					teams.red.save(scb);
+				},
+				function(scb) {
+					teams.blue.save(scb);
+				}, 
+				function(scb) {
+					game.save(scb);
+				}
+			], function(err) {
+				callback(err);
 			});
 		}
+	], function(err) {
+		res.send("OK");
 	});
-};
+}
 
 module.exports = routes;

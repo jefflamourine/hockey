@@ -1,8 +1,10 @@
 var routes = require('./routes.js')
 
-module.exports = function(self) {
+/*
+Map URLS to functions in routes.js
+ */
 
-	// URL Mappings
+module.exports = function(self) {
 	self.app.get('/', routes['root']);
 	self.app.get('/health', routes['health']);
 	self.app.get('/session', routes['session']);
@@ -16,6 +18,8 @@ module.exports = function(self) {
 	self.app.post('/query-games', routes['query-games']);
 	self.app.get('/teams', routes['teams']);
 	self.app.get('/games', routes['games']);
+
+	self.app.post('/verify-game', routes['verify-game']);
 
 	// Any url not previously mapped -> 404
 	self.app.get('*', function(req, res) {

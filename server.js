@@ -10,9 +10,6 @@ var App = function() {
 	var self = this;
 
 	// Set up constants
-	self.dataDir = process.env.OPENSHIFT_DATA_DIR || __dirname + '/data/';
-	self.submissionLog = self.dataDir + 'submissions.txt';
-
 	self.ipaddr = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 	self.port = parseInt(process.env.OPENSHIFT_NODEJS_PORT) || 8080;
 	self.mongoHost = process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1';
@@ -51,6 +48,7 @@ var App = function() {
 		activeDuration: 5 * 60 * 1000,
 	}));
 
+	// Pull in express routing from router.js
 	require('./router.js')(self);
 
 	// Starting the Node JS server with Express
