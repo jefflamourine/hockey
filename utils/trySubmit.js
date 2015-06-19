@@ -6,29 +6,28 @@ var host = 'http://localhost:8080';
 
 function trySubmitGame() {
 	request.post(
-		host + '/try-submit-goals',
-		{ form: 
-			{
-				"red":"ATL", 
-				"blue":"LAK", 
-				"date":"Sun May 17 2015 19:30:00", 
+		host + '/try-submit-goals', {
+			form: {
+				"red": "ATL",
+				"blue": "LAK",
+				"date": "Sun May 17 2015 19:30:00",
 				"goals": [{
-					"scorer": "Pet the Pizza", 
-					"assister": "Dyaloreax", 
-					"team":"red",
+					"scorer": "Pet the Pizza",
+					"assister": "Dyaloreax",
+					"team": "red",
 					"period": 1
 				}, {
-					"scorer": "Pet the Pizza", 
-					"assister": "Dyaloreax", 
-					"team":"red",
+					"scorer": "Pet the Pizza",
+					"assister": "Dyaloreax",
+					"team": "red",
 					"period": 1
 				}]
 			}
 		},
-		function (err, res, body) {
+		function(err, res, body) {
 			if (err) {
 				//console.log(err);
-			} else { 
+			} else {
 				//console.log(res);
 				//console.log(body);
 			}
@@ -38,18 +37,17 @@ function trySubmitGame() {
 
 function tryVerifyGame() {
 	request.post(
-		host + '/verify-game',
-		{ form: 
-			{
-				"red": "ATL", 
-				"blue":"LAK", 
-				"date":"Sun May 17 2015 19:30:00"
+		host + '/verify-game', {
+			form: {
+				"red": "ATL",
+				"blue": "LAK",
+				"date": "Sun May 17 2015 19:30:00"
 			}
 		},
-		function (err, res, body) {
+		function(err, res, body) {
 			if (err) {
 				console.log(err);
-			} else { 
+			} else {
 				console.log(res);
 				console.log(body);
 			}
@@ -59,4 +57,3 @@ function tryVerifyGame() {
 
 trySubmitGame();
 //tryVerifyGame();
-

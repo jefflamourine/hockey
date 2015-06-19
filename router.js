@@ -18,8 +18,8 @@ module.exports = function(self) {
 	self.app.post('/query-games', routes['query-games']);
 	self.app.get('/teams', routes['teams']);
 	self.app.get('/games', routes['games']);
-
 	self.app.post('/verify-game', routes['verify-game']);
+	self.app.get('/consolidated', routes['consolidated']);
 
 	// Any url not previously mapped -> 404
 	self.app.get('*', function(req, res) {

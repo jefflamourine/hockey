@@ -16,7 +16,7 @@ var async = require('async');
 var dataDir = process.env.OPENSHIFT_DATA_DIR || __dirname + '/data/';
 var submissionLog = dataDir + 'submissions.txt';
 
-// Trim a player name up to the tag (First open parene)
+// Trim a player name up to the tag (First open paren)
 function trimName(name) {
 	var tagIndex = name.indexOf('(');
 	if (tagIndex !== -1) {
@@ -33,7 +33,7 @@ function writeSubmissionToFile(body) {
 	fs.appendFile(submissionLog, date + ": " + JSON.stringify(body) + "\n", function(err) {
 		if (err) {
 			console.log(body);
-			return console.log(err);
+			console.log(err);
 		}
 	});
 }
@@ -110,6 +110,7 @@ routes['try-logout'] = function(req, res) {
 	res.redirect('/');
 };
 
+
 routes['query-games'] = function(req, res) {
 	var query = req.body.query;
 	var team = req.body.team;
@@ -130,7 +131,7 @@ routes['query-games'] = function(req, res) {
 			}
 		}
 	});
-}
+};
 
 // Games display page
 routes['games'] = function(req, res) {
@@ -148,6 +149,7 @@ routes['games'] = function(req, res) {
 	});
 };
 
+// Player query interface accessed by views
 routes['query-players'] = function(req, res) {
 	var query = req.body.query;
 	var sort = req.body.sort;
@@ -158,7 +160,7 @@ routes['query-players'] = function(req, res) {
 			res.send(players);
 		}
 	});
-}
+};
 
 // Players display page
 routes['players'] = function(req, res) {
@@ -204,42 +206,6 @@ routes['goals'] = function(req, res) {
 	});
 };
 
-function verifyGame(red, blue, date, callback) {
-	async.parallel(
-		{
-			red: function(cb) {
-				Team.findOne({abbr: red}, cb);
-			},
-			blue: function(cb) {
-				Team.findOne({abbr: blue}, cb);
-			},
-		},
-		function(err, teams) {
-			if (err) {
-				console.log(err);
-				callback("0");
-			} else if (!(teams.red && teams.blue)) {
-				callback("2");
-			} else {
-				Game.findOne({
-					red: teams.red._id,
-					blue: teams.blue._id,
-					date: date
-				}, function(err, game) {
-					if (err) {
-						console.log(err);
-						callback("0");
-					} else if (!game) {
-						callback("3");
-					} else {
-						callback("1");
-					}
-				});
-			}
-		}
-	);
-}
-
 // Game verification (for stats extractor)
 // Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00"}
 // Error codes (sent in response) 0 - Unknown err, 1 - Success, 2 - Team not found, 3 - Game not found
@@ -248,10 +214,44 @@ routes['verify-game'] = function(req, res) {
 	var red = req.body.red;
 	var blue = req.body.blue;
 	var date = req.body.date;
-	findGame(red, blue, date, function(code) {
-		res.send(code);
-	})
-}
+
+	async.parallel({
+			red: function(cb) {
+				Team.findOne({
+					abbr: red
+				}, cb);
+			},
+			blue: function(cb) {
+				Team.findOne({
+					abbr: blue
+				}, cb);
+			},
+		},
+		function(err, teams) {
+			if (err) {
+				console.log(err);
+				res.send("0");
+			} else if (!(teams.red && teams.blue)) {
+				res.send("2");
+			} else {
+				Game.findOne({
+					red: teams.red._id,
+					blue: teams.blue._id,
+					date: date
+				}, function(err, game) {
+					if (err) {
+						console.log(err);
+						res.send("0");
+					} else if (!game) {
+						res.send("3");
+					} else {
+						res.send("1");
+					}
+				});
+			}
+		}
+	);
+};
 
 // Goal submit (for stats extractor)
 // Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
@@ -269,15 +269,26 @@ routes['try-submit-goals'] = function(req, res) {
 			async.parallel([
 				// Red team
 				function(cb) {
-					Team.findOne({abbr: req.body.red}, cb);
+					Team.findOne({
+						abbr: req.body.red
+					}, cb);
 				},
 				// Blue team
 				function(cb) {
-					Team.findOne({abbr: req.body.blue}, cb);
+					Team.findOne({
+						abbr: req.body.blue
+					}, cb);
 				},
 			], function(err, teams) {
-				teamsObj = {"red": teams[0], "blue": teams[1]};
-				callback(err, teamsObj);
+				if (err) {
+					callback(err);
+				} else {
+					teamsObj = {
+						"red": teams[0],
+						"blue": teams[1]
+					};
+					callback(null, teamsObj);
+				}
 			});
 		},
 		// Use the two teams (now that we have IDs), and date to find a game
@@ -354,7 +365,8 @@ routes['try-submit-goals'] = function(req, res) {
 			}, function(err) {
 				callback(err, teams, game);
 			});
-		}, function(teams, game, callback) {
+		},
+		function(teams, game, callback) {
 			// Update the results of the game
 			game.redScore = redGoalCount;
 			game.blueScore = blueGoalCount;
@@ -382,7 +394,7 @@ routes['try-submit-goals'] = function(req, res) {
 				},
 				function(scb) {
 					teams.blue.save(scb);
-				}, 
+				},
 				function(scb) {
 					game.save(scb);
 				}
@@ -393,6 +405,19 @@ routes['try-submit-goals'] = function(req, res) {
 	], function(err) {
 		res.send("OK");
 	});
-}
+};
+
+routes['consolidated'] = function(req, res) {
+	var session;
+	if (req.session && req.session.account) {
+		session = req.session.account.username;
+	}
+	res.render('consolidated', {
+		title: "Consolidated",
+		session: session
+	});
+};
+
+
 
 module.exports = routes;
