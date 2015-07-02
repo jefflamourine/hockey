@@ -16,6 +16,8 @@ var async = require('async');
 var dataDir = process.env.OPENSHIFT_DATA_DIR || __dirname + '/data/';
 var submissionLog = dataDir + 'submissions.txt';
 
+// ---------- UTILITY FUNCTIONS ---------- //
+
 // Trim a player name up to the tag (First open paren)
 function trimName(name) {
 	var tagIndex = name.indexOf('(');
@@ -38,19 +40,11 @@ function writeSubmissionToFile(body) {
 	});
 }
 
+// ---------- ROUTES ---------- // 
+
 routes = {};
 
-// Root
-routes['root'] = function(req, res) {
-	var session;
-	if (req.session && req.session.account) {
-		session = req.session.account.username;
-	}
-	res.render('home', {
-		title: "Home",
-		session: session
-	});
-};
+// ---------- UTILITY ROUTES ---------- //
 
 // Health
 routes['health'] = function(req, res) {
@@ -60,13 +54,16 @@ routes['health'] = function(req, res) {
 // Session
 routes['session'] = function(req, res) {
 	if (req.session && req.session.account) {
-		res.send(req.session.account.username);
+		res.send(req.session);
 	} else {
 		res.send("No valid session");
 	}
 };
 
+// ---------- SESSIONS ---------- //
+
 // Registration form submit
+// Response: success => true, failure => false
 routes['try-register'] = function(req, res) {
 	var username = req.body.username;
 	var password = req.body.password;
@@ -110,6 +107,81 @@ routes['try-logout'] = function(req, res) {
 	res.redirect('/');
 };
 
+// ---------- VIEWS ---------- //
+
+// Root
+routes['root'] = function(req, res) {
+	var session;
+	if (req.session && req.session.account) {
+		session = req.session;
+	}
+	res.render('home', {
+		title: "Home",
+		session: session
+	});
+};
+
+// Games display page
+routes['games'] = function(req, res) {
+	var session;
+	if (req.session && req.session.account) {
+		session = req.session;
+	}
+	var games = Game.find({}).populate('blue', 'abbr').populate('red', 'abbr').exec(function(err, games) {
+		if (!games) games = [];
+		res.render('games', {
+			title: "Games",
+			session: session,
+			games: games
+		});
+	});
+};
+
+// Teams display page
+routes['teams'] = function(req, res) {
+	var session;
+	if (req.session && req.session.account) {
+		session = req.session;
+	}
+	Team.find({}).populate('roster', 'name').exec(function(err, teams) {
+		if (!teams) teams = [];
+		res.render('teams', {
+			title: "Teams",
+			session: session,
+			teams: teams
+		});
+	});
+};
+
+// Players display page
+routes['players'] = function(req, res) {
+	var session;
+	if (req.session && req.session.account) {
+		session = req.session;
+	}
+	res.render('players', {
+		title: "Players",
+		session: session,
+	});
+};
+
+// Goals display page
+routes['goals'] = function(req, res) {
+	var session;
+	if (req.session && req.session.account) {
+		session = req.session;
+	}
+	Goal.find({}, function(err, goals) {
+		if (!goals) goals = [];
+		res.render('goals', {
+			title: "Goals",
+			session: session,
+			goals: goals
+		});
+	});
+};
+
+// ---------- QUERIES ---------- //
 
 routes['query-games'] = function(req, res) {
 	var query = req.body.query;
@@ -133,22 +205,6 @@ routes['query-games'] = function(req, res) {
 	});
 };
 
-// Games display page
-routes['games'] = function(req, res) {
-	var session;
-	if (req.session && req.session.account) {
-		session = req.session.account.username;
-	}
-	var games = Game.find({}).populate('blue', 'abbr').populate('red', 'abbr').exec(function(err, games) {
-		if (!games) games = [];
-		res.render('games', {
-			title: "Games",
-			session: session,
-			games: games
-		});
-	});
-};
-
 // Player query interface accessed by views
 routes['query-players'] = function(req, res) {
 	var query = req.body.query;
@@ -162,49 +218,7 @@ routes['query-players'] = function(req, res) {
 	});
 };
 
-// Players display page
-routes['players'] = function(req, res) {
-	var session;
-	if (req.session && req.session.account) {
-		session = req.session.account.username;
-	}
-	res.render('players', {
-		title: "Players",
-		session: session,
-	});
-};
-
-// Teams display page
-routes['teams'] = function(req, res) {
-	var session;
-	if (req.session && req.session.account) {
-		session = req.session.account.username;
-	}
-	Team.find({}).populate('roster', 'name').exec(function(err, teams) {
-		if (!teams) teams = [];
-		res.render('teams', {
-			title: "Teams",
-			session: session,
-			teams: teams
-		});
-	});
-};
-
-// Goals display page
-routes['goals'] = function(req, res) {
-	var session;
-	if (req.session && req.session.account) {
-		session = req.session.account.username;
-	}
-	Goal.find({}, function(err, goals) {
-		if (!goals) goals = [];
-		res.render('goals', {
-			title: "Goals",
-			session: session,
-			goals: goals
-		});
-	});
-};
+// ---------- STATS EXTRACTOR ---------- //
 
 // Game verification (for stats extractor)
 // Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00"}
@@ -406,18 +420,5 @@ routes['try-submit-goals'] = function(req, res) {
 		res.send("OK");
 	});
 };
-
-routes['consolidated'] = function(req, res) {
-	var session;
-	if (req.session && req.session.account) {
-		session = req.session.account.username;
-	}
-	res.render('consolidated', {
-		title: "Consolidated",
-		session: session
-	});
-};
-
-
 
 module.exports = routes;

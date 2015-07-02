@@ -18,7 +18,17 @@ html
 			div#session-info.border.right
 				if session
 					div.fill.center-contents.hover
-						|#{session}
+						|#{session.account.username}
+						br
+						br
+						if session.account.playerName
+							|#{session.account.playerName}
+						else
+							select
+								option(value='1')
+									1
+								option(value='2')
+									2
 				else 
 					div#form-container.center-contents
 						span#form-response
