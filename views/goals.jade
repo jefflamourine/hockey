@@ -14,16 +14,11 @@ html
 				if session
 					div#session(onclick="location.href='/dashboard';")
 						|#{session}
-				else
-					div#login(onclick="location.href='/login';")
-						|Log In
-					div#register(onclick="location.href='/register';")
-						|Register
 		table.h-center.v-center
 			tr.table-header
 				td Scorer 
 				td Assister
 			for goal in goals
 				tr
-					td= goal.scorer
-					td= goal.assister
+					td= goal.scorer.name
+					td= goal.assister.name

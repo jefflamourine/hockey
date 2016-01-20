@@ -102,6 +102,10 @@ var goalSchema = new Schema({
 	period: {
 		type: Number,
 		required: true
+	},
+	time: {
+		type: Number,
+		required: true
 	}
 });
 
@@ -115,20 +119,6 @@ var gameSchema = new Schema({
 		ref: 'Team',
 		required: true
 	},
-	bluePlayedGames: {
-		forwards: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}],
-		defense: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}],
-		goalies: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}]
-	},
 	blueScore: {
 		type: Number,
 		required: true
@@ -137,20 +127,6 @@ var gameSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'Team',
 		required: true
-	},
-	redPlayedGames: {
-		forwards: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}],
-		defense: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}],
-		goalies: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Player'
-		}]
 	},
 	redScore: {
 		type: Number,

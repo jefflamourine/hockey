@@ -171,7 +171,7 @@ routes['goals'] = function(req, res) {
 	if (req.session && req.session.account) {
 		session = req.session;
 	}
-	Goal.find({}, function(err, goals) {
+	Goal.find({}).populate('scorer', 'name').populate('assister', 'name').exec(function(err, goals) {
 		if (!goals) goals = [];
 		res.render('goals', {
 			title: "Goals",
@@ -268,7 +268,7 @@ routes['verify-game'] = function(req, res) {
 };
 
 // Goal submit (for stats extractor)
-// Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1}]}
+// Example POST body: {"red":"ATL", "blue":"LAK", "date":"Sun May 17 2015 19:30:00", "goals": [{"scorer": "Pet the Pizza", "assister": "Dyaloreax", "team":"blue", "period": 1, "time": 240}]}
 routes['try-submit-goals'] = function(req, res) {
 	writeSubmissionToFile(req.body);
 
@@ -317,12 +317,12 @@ routes['try-submit-goals'] = function(req, res) {
 		},
 		// The heavy lifting
 		function(teams, game, callback) {
-			// The period where the last goal was scored (to determine if OT occured)
 			// Iterate over all the goals in the request and do lots of async operations
 			async.forEach(req.body.goals, function(goal, cb) {
 				var goalObj = {};
 				var scorerName = trimName(goal.scorer);
 				var assisterName = trimName(goal.assister);
+				// The period where the last goal was scored (to determine if OT occured)
 				if (goal.period > lastGoalPeriod) {
 					lastGoalPeriod = goal.period;
 				}
@@ -357,6 +357,7 @@ routes['try-submit-goals'] = function(req, res) {
 						goalObj.team = teamFor._id;
 						goalObj.game = game._id;
 						goalObj.period = goal.period;
+						goalObj.time = goal.time;
 						goalDoc = new Goal(goalObj);
 						// We're done with the goal and players, so save in parallel
 						async.parallel([
